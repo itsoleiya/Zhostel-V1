@@ -1,0 +1,40 @@
+.hero {
+  position: relative; height: 100vh; min-height: 560px; color: #fff; overflow: hidden;
+  background: #555 center / cover no-repeat; isolation: isolate;
+}
+.hero__video { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: 0; object-fit: cover; }
+.hero__overlay { position: absolute; inset: 0; background: #000; opacity: .3; z-index: 1; }
+.hero__inner { position: relative; height: 100%; z-index: 2; }
+.hero__text { position: absolute; left: 15px; right: 15px; top: 50%; transform: translateY(-55%); text-align: center; }
+.hero__logo { display: block; margin: 0 auto 0; width: 250px; height: 250px; }
+.hero__title {
+  font: 900 65px/1.0625 var(--font-display); margin: 30px 0 30px; display: inline-block; position: relative; z-index: 0;
+}
+.hero__title::after { content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 23px; background: #fff; opacity: .2; z-index: -1; }
+.hero__subtitle { font: 800 30px/1.2 var(--font-display); margin: 0; }
+.hero__copyright {
+  position: absolute; right: 0; bottom: 250px; transform: rotate(-90deg); transform-origin: 100% 100%;
+  font-weight: 800; white-space: nowrap;
+}
+.hero__scroll { position: absolute; left: 50%; bottom: 120px; width: 40px; margin-left: -20px; text-align: center; font: 12px/18px var(--font-display); color: #fff; z-index: 2; }
+.hero__scroll:hover { text-decoration: none; }
+.hero__scroll b { width: 25px; height: 40px; border: 2px solid #fff; border-radius: 15px; display: inline-block; position: relative; }
+.hero__scroll b::before { content: ""; position: absolute; left: 10px; top: 8px; width: 2px; height: 8px; background: #fff; animation: mouse-down 2s ease infinite; }
+@keyframes mouse-down { 0% { opacity: 0; transform: translateY(0); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(12px); } }
+
+.hero__book-wrap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; }
+.hero__book { background: #fff; padding: 25px 30px 34px; }
+.hero__book .title-bar { font-size: 30px; line-height: 30px; margin: 0; color: #666; }
+.hero .hero__book .title-bar::after { height: 23px; margin-top: 0; bottom: -20px; background: var(--yellow); }
+.hero__book a.title-bar:hover { text-decoration: none; color: #333; }
+
+@media (max-width: 767px) {
+  .hero { min-height: 600px; }
+  .hero__logo { width: 160px; height: 160px; }
+  .hero__title { font-size: 34px; margin: 20px 0; }
+  .hero__subtitle { font-size: 22px; }
+  .hero__copyright { display: none; }
+  .hero__scroll { bottom: 100px; }
+  .hero__book { padding: 18px 20px 20px; }
+  .hero__book .title-bar { font-size: 24px; }
+}

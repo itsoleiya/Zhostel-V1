@@ -1,0 +1,75 @@
+.site-header { position: absolute; top: 0; left: 0; right: 0; z-index: 30; color: #fff; }
+.site-header__bar { position: relative; height: 68px; font-size: 14px; }
+.site-header__phone { position: absolute; padding-top: 20px; }
+.site-header__phone a:hover { text-decoration: none; opacity: .8; }
+.site-header__share { position: absolute; right: 15px; top: 70px; display: flex; align-items: center; gap: 6px; }
+.site-header__share b { font-weight: 700; position: relative; padding-left: 20px; transition: margin .5s; }
+.site-header__share b::before { content: "\2192"; position: absolute; left: 0; font-weight: 400; font-size: 11px; top: 1px; }
+.site-header__share-btns { display: inline-flex; overflow: hidden; max-width: 0; opacity: 0; transition: all .3s; gap: 6px; }
+.site-header__share:hover .site-header__share-btns,
+.site-header__share:focus-within .site-header__share-btns { max-width: 90px; opacity: 1; }
+@media (hover: none) { .site-header__share-btns { max-width: 90px; opacity: 1; } }
+
+/* Rotated menu tab: white box, "Z Hostel" in the theme's unloaded Raleway (serif fallback). */
+.menu-tab {
+  position: fixed; z-index: 40; left: 0; top: 60%;
+  transform: rotate(-90deg); transform-origin: 0 0;
+  background: #fff; border: 0; color: #333; padding: 30px; display: flex; align-items: center; gap: 30px;
+  transition: padding .3s, left .3s, opacity .3s;
+}
+.menu-tab b { font: 800 40px/40px var(--font-display-bare); }
+.menu-tab:hover { padding-top: 50px; }
+.menu-tab__lines { width: 21px; height: 30px; display: flex; gap: 6px; transform: rotate(180deg); align-items: center; }
+.menu-tab__lines span { width: 1px; height: 28px; background: #000; transition: height .3s; }
+.menu-tab:hover .menu-tab__lines span:nth-child(1),
+.menu-tab:hover .menu-tab__lines span:nth-child(3) { height: 0; }
+.menu-tab:hover .menu-tab__lines span:nth-child(2) { height: 40px; }
+.menu-tab.is-hidden { opacity: 0; pointer-events: none; }
+
+.menu-scrim { position: fixed; inset: 0; z-index: 44; background: rgba(0,0,0,.4); opacity: 0; pointer-events: none; transition: opacity .4s; }
+.menu-scrim.is-open { opacity: 1; pointer-events: auto; }
+
+.menu-panel {
+  position: fixed; z-index: 45; top: 0; left: -600px; width: 600px; max-width: 100%; height: 100%;
+  background: var(--dark); color: #fff; transition: left .5s; overflow-y: auto;
+}
+.menu-panel.is-open { left: 0; }
+.menu-panel__logo {
+  position: absolute; left: 40px; top: 50%; font: 800 40px/40px var(--font-display-bare); color: #eee;
+  transform: rotate(-90deg) translateX(50%); transform-origin: 0 0; white-space: nowrap;
+}
+.menu-panel__close {
+  position: absolute; top: 34px; right: 34px; width: 56px; height: 56px; background: none; border: 0;
+}
+.menu-panel__close span { position: absolute; left: 3px; top: 27px; width: 50px; height: 1px; background: #eee; transition: transform .3s; }
+.menu-panel__close span:nth-child(1) { transform: rotate(45deg); }
+.menu-panel__close span:nth-child(2) { transform: rotate(-45deg); }
+.menu-panel__close:hover span:nth-child(1) { transform: rotate(135deg); }
+.menu-panel__close:hover span:nth-child(2) { transform: rotate(45deg); }
+
+.menu-panel__body { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 360px; }
+.menu-panel ul { list-style: none; margin: 0; padding: 0; }
+.menu-panel li { overflow: hidden; }
+.menu-panel li a {
+  display: block; position: relative; top: 50px; margin-top: -3px;
+  font: 800 40px/47px var(--font-display-bare); color: #fff; transition: top .3s, color .3s;
+}
+.menu-panel li.is-long a { font: 800 33px/47px var(--font-display-bare); }
+.menu-panel.is-open li a { top: 0; }
+.menu-panel li a span { transition: color .3s; color: rgba(255,255,255,.35); }
+.menu-panel li a:hover { text-decoration: none; }
+.menu-panel li a:hover span, .menu-panel li a[aria-current="page"] span { color: #fff; }
+.menu-panel__social { margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,.1); color: #eee; display: flex; gap: 10px; align-items: center; }
+.menu-panel__social a { color: #eee; }
+
+@media (max-width: 767px) {
+  .site-header__phone { font-size: 12px; }
+  .site-header__share { top: 44px; }
+  .menu-tab { padding: 14px 18px; gap: 16px; top: 70%; }
+  .menu-tab b { font-size: 26px; line-height: 26px; }
+  .menu-tab:hover { padding-top: 14px; }
+  .menu-panel { width: 100%; left: -100%; }
+  .menu-panel__logo { display: none; }
+  .menu-panel__body { width: auto; left: 40px; right: 30px; transform: translateY(-50%); }
+  .menu-panel li a, .menu-panel li.is-long a { font-size: 24px; line-height: 24px; margin: 10px 0; }
+}
