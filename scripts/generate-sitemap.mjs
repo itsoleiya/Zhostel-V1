@@ -1,5 +1,5 @@
 // Writes dist/sitemap.xml and dist/robots.txt for THIS deployment (VITE_SITE_URL), after `vite build`.
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, copyFileSync } from "node:fs";
 import { loadEnv } from "./env.mjs";
 
 const env = loadEnv();
@@ -21,5 +21,7 @@ ${urls.map(([u, mod]) => `  <url><loc>${site}${u}</loc>${mod ? `<lastmod>${mod.s
 `;
 if (!existsSync("dist")) { console.error("dist/ not found — run vite build first."); process.exit(1); }
 writeFileSync("dist/sitemap.xml", xml);
+// GitHub Pages has no rewrites: it serves 404.html for unknown paths, so make that the app too.
+copyFileSync("dist/index.html", "dist/404.html");
 writeFileSync("dist/robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${site}/sitemap.xml\n`);
 console.log(`sitemap.xml: ${urls.length} URLs for ${site}`);

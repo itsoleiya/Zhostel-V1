@@ -10,6 +10,9 @@ export default function PostBody({ post }: { post: Post }) {
     let h = resolveHtmlAssets(post.contentHtml);
     h = h.replace(/<img(?![^>]*\bloading=)/g, '<img loading="lazy" decoding="async"');
     h = h.replace(/<iframe(?![^>]*\bloading=)/g, '<iframe loading="lazy"');
+    // Internal links in posts are root-relative ("/slug/"); prefix the deploy base (e.g. /Zhostel-V1/).
+    const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+    if (base) h = h.replace(/href="\/(?!\/|wp-content\/)/g, `href="${base}/`);
     return h;
   }, [post.contentHtml]);
 
@@ -32,9 +35,10 @@ export default function PostBody({ post }: { post: Post }) {
           const a = (e.target as HTMLElement).closest("a");
           const href = a?.getAttribute("href");
           if (!a || !href || a.target === "_blank" || e.metaKey || e.ctrlKey) return;
-          if (href.startsWith("/") && !href.startsWith("//") && !href.startsWith("/wp-content/")) {
+          const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+          if (href.startsWith("/") && !href.startsWith("//") && !href.includes("/wp-content/")) {
             e.preventDefault();
-            navigate(href);
+            navigate(base && href.startsWith(base + "/") ? href.slice(base.length) : href);
           }
         }}
       />
