@@ -60,6 +60,8 @@
 }
 .contact-form button:hover:not(:disabled) { background: var(--yellow); }
 .contact-form button:disabled { opacity: .7; cursor: progress; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.contact-form { position: relative; }
 .field-error { color: #c0392b; font-size: 13px; margin: 0 0 8px; }
 .form-status p { margin: 12px 0 0; padding: 10px 12px; font-size: 13px; line-height: 1.6; }
 .form-status .ok { background: #f2f2f2; border-left: 3px solid var(--yellow); }

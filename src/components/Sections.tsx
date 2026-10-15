@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { site } from "../data/site";
 import type { Amenity, Review, Venue } from "../data/types";
-import { CONTACT_ENDPOINT } from "../config/site";
+import { CONTACT_ENDPOINT, SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "../config/site";
 import { assetUrl } from "../utils/assets";
 import Carousel from "./Carousel";
 import { useInView } from "./Chrome";
@@ -105,6 +105,20 @@ export function FlipGrid({ items, variant }: { items: Venue[]; variant: "logo" |
 
 type FormState = { status: "idle" } | { status: "sending" } | { status: "sent"; via: "endpoint" | "mail" } | { status: "error"; message: string };
 
+/** Saves a message to Supabase (table contact_messages). Throws with a readable reason on failure. */
+async function sendToSupabase(data: { name: string; email: string; subject: string; message: string }) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/contact_messages`, {
+    method: "POST",
+    headers: { apikey: SUPABASE_PUBLISHABLE_KEY, "Content-Type": "application/json", Prefer: "return=minimal" },
+    body: JSON.stringify({ ...data, page: (window.location.pathname + window.location.hash).slice(0, 500) }),
+  });
+  if (!res.ok) {
+    let detail = "";
+    try { detail = (await res.json())?.message ?? ""; } catch { /* no body */ }
+    throw new Error(res.status >= 500 || res.status === 0 ? "The message service is unavailable right now." : `The message was rejected${detail ? ` (${detail})` : ""}.`);
+  }
+}
+
 /** Contact form with the original fields. Delivery: VITE_CONTACT_ENDPOINT if set, otherwise a pre-filled email. */
 export function ContactForm() {
   const [state, setState] = useState<FormState>({ status: "idle" });
@@ -120,11 +134,16 @@ export function ContactForm() {
       subject: String(fd.get("your-subject") ?? ""),
       message: String(fd.get("your-message") ?? "").trim(),
     };
+    // Honeypot: real visitors never see or fill this field; bots usually do.
+    if (String(fd.get("website") ?? "")) { setState({ status: "sent", via: "endpoint" }); form.reset(); return; }
     const errs: Record<string, string> = {};
     if (!data.name) errs.name = "Enter your name.";
     if (!data.email) errs.email = "Enter your email address.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) errs.email = "Enter an email address like name@example.com.";
     if (!data.subject) errs.subject = "Choose what your message is about.";
+    if (!data.message) errs.message = "Write your message.";
+    else if (data.message.length > 5000) errs.message = "Keep the message under 5,000 characters.";
+    if (data.name.length > 120) errs.name = "Keep the name under 120 characters.";
     setErrors(errs);
     if (Object.keys(errs).length) {
       const first = form.querySelector<HTMLElement>(`[name="your-${Object.keys(errs)[0]}"]`);
@@ -132,7 +151,8 @@ export function ContactForm() {
       return;
     }
 
-    if (!CONTACT_ENDPOINT) {
+    const useSupabase = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
+    if (!useSupabase && !CONTACT_ENDPOINT) {
       const body = `${data.message}\n\n— ${data.name} (${data.email})`;
       window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(body)}`;
       setState({ status: "sent", via: "mail" });
@@ -140,12 +160,16 @@ export function ContactForm() {
     }
     setState({ status: "sending" });
     try {
-      const res = await fetch(CONTACT_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error(`The server answered ${res.status}.`);
+      if (useSupabase) {
+        await sendToSupabase(data);
+      } else {
+        const res = await fetch(CONTACT_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error(`The server answered ${res.status}.`);
+      }
       setState({ status: "sent", via: "endpoint" });
       form.reset();
     } catch (err) {
@@ -176,7 +200,13 @@ export function ContactForm() {
       {errors.subject && <p className="field-error" id="err-subject">{errors.subject}</p>}
 
       <label className="sr-only" htmlFor="cf-message">Message</label>
-      <textarea id="cf-message" name="your-message" rows={10} placeholder="Message" />
+      <textarea id="cf-message" name="your-message" rows={10} placeholder="Message" required maxLength={5000} {...field("message")} />
+      {errors.message && <p className="field-error" id="err-message">{errors.message}</p>}
+
+      <div className="hp" aria-hidden="true">
+        <label htmlFor="cf-website">Leave this empty</label>
+        <input id="cf-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
 
       <button type="submit" disabled={state.status === "sending"}>{state.status === "sending" ? "Sending…" : "Send"}</button>
       <div className="form-status" role="status" aria-live="polite">

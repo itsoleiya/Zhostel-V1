@@ -61,7 +61,7 @@ Original images carry no alt text. Descriptive alt text was added for room and f
 
 - **Instagram feed** (homepage `@zhostelph`): the embedded access token has expired, so the live feed is empty. Rebuilt as the same photo band with a "Follow on Instagram" button.
 - **Location map** (Contact, Gallery): the original uses the Google Maps JavaScript API and renders an empty canvas. Rebuilt with the working Google Maps embed from the homepage.
-- **Contact form**: the original submits to WordPress (Contact Form 7). There is no server in the rebuild; see section 5.
+- **Contact form**: the original submits to WordPress (Contact Form 7). The rebuild saves messages to Supabase; see section 5 and the README. No email notification is sent yet.
 - **Blog comments**: the original shows a WordPress "Leave a Reply" form on posts. Not rebuilt (needs a backend and moderation); no comments were displayed on the posts inspected.
 - **Raleway font**: declared in the theme CSS but never loaded. Reproduced as visitors actually see it (Arial; serif for the menu tab and menu links). `VITE_LOAD_RALEWAY=true` restores the intended font.
 - **Icon fonts**: amenity icons come from Themify and a licensed Flaticon set. Replaced with visually similar open-source Lucide icons.
@@ -79,7 +79,7 @@ Original images carry no alt text. Descriptive alt text was added for room and f
 | Carousels | Owl Carousel, prev/next squares + line pager | Same look; arrow keys and swipe; pauses on hover/focus |
 | Flip cards | Hover rotates and reveals details | Same on mouse and keyboard focus; on touch screens details show below the image |
 | Booking | Links to Cloudbeds | Same link everywhere; review-slide "BOOK NOW" buttons (`href="#"`, dead on the original) now also go to Cloudbeds |
-| Contact form | Name, Email, Subject (7 options), Message → WordPress | Same fields and options, with validation and error messages. Sends to `VITE_CONTACT_ENDPOINT`; if unset, opens the visitor's email app pre-filled and says so. Never reports a message as sent unless the endpoint confirms it. |
+| Contact form | Name, Email, Subject (7 options), Message → WordPress | Same fields and options, with validation and error messages. Saved to Supabase (`contact_messages`, insert-only for the website) with a spam honeypot. Never reports a message as sent unless Supabase confirms it. |
 | Phones, email, address | Plain text (email hidden by Cloudflare) | `tel:`, `mailto:` and Google Maps links |
 | Video | Autoplaying muted cover | Same; disabled for visitors who prefer reduced motion |
 | About video | Links to YouTube | Plays inline in the tile |

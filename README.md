@@ -26,6 +26,7 @@ Requires Node 18 or newer.
 | --- | --- | --- |
 | `VITE_SITE_URL` | `https://zhostel.com` | Public URL of this deployment. Used for canonical tags and the sitemap. Set it to the staging URL while testing so search engines don't see duplicates. |
 | `VITE_ASSET_ORIGIN` | `https://zhostel.com` | Where `/wp-content/...` files load from. Leave as-is while WordPress is live. |
+| `VITE_SUPABASE_URL` / `VITE_SUPABASE_PUBLISHABLE_KEY` | project "Zhostel V1" | Where contact form messages are saved (table `contact_messages`). Built in; override to use another project. |
 | `VITE_CONTACT_ENDPOINT` | empty | URL that accepts a JSON POST `{name, email, subject, message}` (Formspree, Basin, your own API). Empty = the form opens the visitor's email app with the message pre-filled. |
 | `VITE_LOAD_RALEWAY` | `false` | The live site names Raleway but never loads it, so visitors see Arial (and a serif in the menu). `false` reproduces that; `true` loads real Raleway. |
 
@@ -74,6 +75,14 @@ src/
   config/       Environment settings
 scripts/        Sitemap, post import, asset mirroring
 ```
+
+## Contact form messages (Supabase)
+
+Messages from the contact form are saved in the Supabase project **Zhostel V1**, table `public.contact_messages` (name, email, subject, message, page, status, created_at). Read and manage them in the Supabase dashboard: Table Editor → `contact_messages`. Set `status` to `replied` or `archived` as you work through them.
+
+The website uses the publishable key, which is safe to expose. The database allows that key to **insert** new messages only. It cannot read, edit or delete them; reading happens in the dashboard. Fields are validated by the database too (length limits, email format, the 7 allowed subjects).
+
+Supabase does not send an email when a message arrives. To get notified, add a Database Webhook or an Edge Function on `contact_messages` inserts.
 
 ## Booking
 
