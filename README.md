@@ -57,6 +57,7 @@ The site is a static single-page app; the host must send unknown paths to `index
 
 - **Netlify:** connect the repo; `netlify.toml` sets the build and the rewrite.
 - **Vercel:** import the repo; `vercel.json` sets the build and the rewrite.
+- **GitHub Pages:** `npm run build:pages && npm run deploy:pages` builds for the `/Zhostel-V1/` path and pushes to the `gh-pages` branch (Settings → Pages → Branch: `gh-pages`). Old build files are kept so visitors with a cached page don't hit missing-file errors.
 - **Any static host / nginx:** upload `dist/` and add `try_files $uri /index.html;`.
 
 Set the `VITE_*` variables in the host's environment settings, not only in a local `.env`.

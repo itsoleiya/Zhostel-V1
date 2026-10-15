@@ -10,7 +10,8 @@
     "typecheck": "tsc -b",
     "import:posts": "node scripts/import-wp-posts.mjs",
     "mirror:assets": "node scripts/mirror-assets.mjs",
-    "build:pages": "node scripts/build-pages.mjs"
+    "build:pages": "node scripts/build-pages.mjs",
+    "deploy:pages": "node scripts/deploy-pages.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.441.0",
