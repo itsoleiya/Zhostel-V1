@@ -85,6 +85,32 @@ The website uses the publishable key, which is safe to expose. The database allo
 
 Supabase does not send an email when a message arrives. To get notified, add a Database Webhook or an Edge Function on `contact_messages` inserts.
 
+## Database (Supabase "Zhostel V1")
+
+All website content is also stored in Supabase, one table per kind of content:
+
+| Table | Rows | Holds |
+| --- | --- | --- |
+| `site_settings` | 1 | Phones, emails, address, social links, booking URL, PDFs, contact subjects |
+| `nav_items` | 7 | Main menu |
+| `pages` | 7 | URL, title and hero banner of each page |
+| `page_sections` / `section_images` | 10 / 5 | About story, RFID, CTAs, Getting There, Location, Group Booking |
+| `features` / `feature_images` | 4 / 17 | Homepage "Explore Z" rows and slides |
+| `rooms` / `room_images` | 7 / 29 | Room types, published prices, size, photos |
+| `amenities` | 12 | Amenities & Services (flags for Home and Rooms pages) |
+| `reviews` | 6 | Quoted reviews (Home and Rooms) |
+| `activities` / `activity_descriptions` | 3 / 3 | Events & Activities |
+| `venues` | 15 | Z Street places (9) and Tours (6) |
+| `gallery_albums` / `gallery_images` | 11 / 164 | Gallery |
+| `posts` | 92 | Blog posts (full HTML) |
+| `contact_messages` | — | Contact form submissions |
+
+The website's publishable key can **read** content and **insert** contact messages; nothing else. Edit content in the Supabase Table Editor. `rooms`, `venues` and `posts` have an `is_published` switch to hide a row without deleting it.
+
+Schema: `supabase/migrations/`. To reload all content from the repo's data files: `npm run export:content`, commit and push, then run `supabase/seed.sql` in the SQL editor (it replaces all content rows).
+
+The website still reads its content from `src/data/`. Switching the pages to read from these tables is a separate step.
+
 ## Booking
 
 Every "Book Now" links to the existing Cloudbeds page (`hotels.cloudbeds.com/reservation/oL7RdR`). The site does not check availability or take reservations itself.

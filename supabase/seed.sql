@@ -3,7 +3,7 @@
 -- To load a specific version, change 'main' below to a commit SHA.
 begin;
 create extension if not exists http with schema extensions;
-create temp table _src on commit drop as
+create temp table _src as
 select
   (select content::jsonb from extensions.http_get('https://raw.githubusercontent.com/soleiyait8/Zhostel-V1/main/supabase/content.json')) as c,
   (select content::jsonb from extensions.http_get('https://raw.githubusercontent.com/soleiyait8/Zhostel-V1/main/src/data/posts.json')) as p;
@@ -88,4 +88,6 @@ select (x->>'id')::bigint, x->>'slug', x->>'title', (x->>'date')::timestamp, (x-
   x->>'contentHtml', x->>'sourceUrl'
 from _src, jsonb_array_elements(p) x;
 
+drop table _src;
+drop extension if exists http;  -- only needed while loading
 commit;
