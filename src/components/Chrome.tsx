@@ -5,9 +5,11 @@ import "./Chrome.css";
 /** "|| book now ||" fixed tab on the right edge. */
 export function BookFloat() {
   return (
-    <a className="book-float" href={site.bookingUrl} target="_blank" rel="noopener noreferrer">
-      || book now ||<span className="sr-only"> (opens the Cloudbeds booking page)</span>
-    </a>
+    <div className="book-float">
+      <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer">
+        || book now ||<span className="sr-only"> (opens the Cloudbeds booking page)</span>
+      </a>
+    </div>
   );
 }
 

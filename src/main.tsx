@@ -5,6 +5,14 @@ import { router } from "./routes";
 import { LOAD_RALEWAY } from "./config/site";
 import "./styles/base.css";
 
+// Fonts used by the "Coming up" event cards (zhostel.github.io/events/ style).
+{
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@800&family=DM+Sans:wght@400;500;700&display=swap";
+  document.head.appendChild(link);
+}
+
 if (LOAD_RALEWAY) {
   const link = document.createElement("link");
   link.rel = "stylesheet";

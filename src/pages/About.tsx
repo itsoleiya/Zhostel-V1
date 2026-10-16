@@ -24,7 +24,7 @@ export default function About() {
                   <iframe src={about.video.embed} title="Z Hostel in 1 minute" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen />
                 ) : (
                   <button type="button" onClick={() => setPlaying(true)} style={{ backgroundImage: `url(${assetUrl(about.video.image)})` }}>
-                    <span className="about-video__label">{about.video.lines.map((l) => <span key={l}>{l}</span>)}</span>
+                    <span className="about-video__label">{about.video.lines.map((l) => <span key={l} className="about-video__line">{l}</span>)}</span>
                     <span className="sr-only"> — play video</span>
                   </button>
                 )}

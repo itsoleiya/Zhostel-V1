@@ -5,17 +5,17 @@
 .split-row__media .carousel { position: absolute; inset: 0; }
 .split-row__text { background: #fff; padding: 60px; position: relative; z-index: 1; }
 .split-row__text h4 { font-size: 18px; margin: 0 0 20px; }
-.split-row__text p { line-height: 1.8; margin: 0 0 20px; }
-.split-row__price { font: 800 32px/1.15 var(--font-display); margin: 30px 0 25px; }
+.split-row__text p { line-height: 25px; margin: 0 0 20px; }
+.split-row__price { font: 500 24px/26.4px var(--font-body); margin: 30px 0 25px; }  /* plain h3 on the live site */
 .split-row__price span { display: block; }
-.split-row__note { font-size: 12px; color: #555; }
+.split-row__note { font-size: 14px; }
 
 .book-heading { font: 800 50px/50px var(--font-display); margin: 0 0 30px; }
 .book-heading__link { display: inline-block; position: relative; vertical-align: top; color: var(--yellow); transform: translateY(4px); }
 .book-heading__link:hover { text-decoration: none; }
 .book-heading__icon { transform: rotate(45deg); }
 .book-heading__link b {
-  position: absolute; left: 40px; top: 6px; font: 400 14px/14px var(--font-body); color: #333;
+  position: absolute; left: 40px; top: 6px; font: 700 14px/14px var(--font-display); color: #333;
   white-space: nowrap; opacity: 0; transition: all .3s;
 }
 .book-heading__link:hover b, .book-heading__link:focus-visible b { opacity: 1; left: 48px; }
@@ -24,13 +24,12 @@
 .dark-slide__media { position: relative; min-height: 300px; }
 .dark-slide__media .photo-slide { position: absolute; inset: 0; }
 .dark-slide__panel { background: var(--dark); color: #fff; padding: 56px 45px 46px; display: flex; flex-direction: column; justify-content: center; }
-.dark-slide__panel h2 { font: 800 40px/1.1 var(--font-display); margin: 0 0 30px; }
-.dark-slide__panel p { line-height: 1.8; }
+.dark-slide__panel h2 { font: 800 50px/50px var(--font-display); margin: 0 0 30px; }
+.dark-slide__panel p { line-height: 25px; }
 
 @media (max-width: 991px) {
   .split-row, .dark-slide { grid-template-columns: 1fr; }
   .split-row--img-right .split-row__media { order: 0; }
   .split-row__text { padding: 56px 15px 46px; }
-  .book-heading { font-size: 36px; line-height: 40px; }
   .dark-slide__panel { padding: 40px 20px; }
 }

@@ -111,6 +111,10 @@ Schema: `supabase/migrations/`. To reload all content from the repo's data files
 
 The website still reads its content from `src/data/`. Switching the pages to read from these tables is a separate step.
 
+## "Coming up" events
+
+The dark "Coming up / Halloween at Z" block (Home, after the hero, and top of Events & Activities) is driven by `src/data/upcoming.ts`. Each card has a countdown to `startsAt` (Manila time), switches to "Happening now" during the event, and disappears after `endsAt`; the whole block hides when no events are left. Copy and pictures come from https://zhostel.github.io/events/ (pictures are linked from zhostel.github.io and ody-z.com). THE ODY-Z start time (6PM) isn't published anywhere; update `startsAt` if it differs.
+
 ## Booking
 
 Every "Book Now" links to the existing Cloudbeds page (`hotels.cloudbeds.com/reservation/oL7RdR`). The site does not check availability or take reservations itself.

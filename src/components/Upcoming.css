@@ -1,0 +1,71 @@
+/* Matches the "Coming up" block on zhostel.github.io/events/ (colours sampled from it). */
+.upc {
+  --upc-bg: #0e0d0c; --upc-cream: #f6f1ea; --upc-orange: #fe5b32; --upc-ink: #1a0d06;
+  --upc-display: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+  --upc-sans: "DM Sans", Arial, sans-serif;
+  background: var(--upc-bg); color: var(--upc-cream); font-family: var(--upc-sans);
+  padding: 72px 0 88px;
+}
+.upc-kicker { margin: 0 0 6px; color: var(--upc-orange); font: 700 15px/1.2 var(--upc-sans); letter-spacing: .16em; text-transform: uppercase; }
+.upc-title { margin: 0 0 56px; font: 800 clamp(44px, 6vw, 78px)/0.95 var(--upc-display); text-transform: uppercase; letter-spacing: -.01em; }
+
+.upc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px; }
+.upc-card {
+  position: relative; overflow: hidden; isolation: isolate; min-height: 640px;
+  border: 1px solid rgba(246, 241, 234, .14); border-radius: 18px; background: #151311;
+}
+.upc-card__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.upc-card::before { /* darkening so text stays readable over any photo */
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(14,13,12,.35) 0%, rgba(14,13,12,.55) 35%, rgba(14,13,12,.88) 70%, rgba(14,13,12,.95) 100%);
+}
+.upc-card__body { padding: 90px 50px 50px; display: flex; flex-direction: column; height: 100%; }
+
+.upc-pill {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 9px; margin: 0 0 12px;
+  background: var(--upc-orange); color: var(--upc-ink); border-radius: 999px; padding: 5px 14px;
+  font: 700 13px/1.3 var(--upc-sans); letter-spacing: .12em; text-transform: uppercase;
+}
+.upc-pill span { width: 8px; height: 8px; border-radius: 50%; background: #9b2c10; }
+.upc-card__title { margin: 0 0 22px; font: 800 clamp(48px, 5.4vw, 76px)/0.95 var(--upc-display); text-transform: uppercase; letter-spacing: -.01em; }
+.upc-date { margin: 0 0 8px; font: 700 17px/1.35 var(--upc-sans); }
+.upc-venue { margin: 0 0 22px; font: 400 17px/1.35 var(--upc-sans); color: rgba(246, 241, 234, .7); }
+
+.upc-count ul { list-style: none; margin: 0 0 6px; padding: 0; display: flex; gap: 12px; flex-wrap: wrap; }
+.upc-count li {
+  width: 88px; padding: 12px 0 10px; text-align: center; border-radius: 10px;
+  border: 1px solid rgba(246, 241, 234, .2); background: rgba(14, 13, 12, .45);
+}
+.upc-count b { display: block; font: 800 40px/1 var(--upc-display); font-variant-numeric: tabular-nums; }
+.upc-count span { display: block; margin-top: 8px; font: 500 13px/1 var(--upc-sans); letter-spacing: .14em; text-transform: uppercase; color: rgba(246, 241, 234, .65); }
+.upc-live { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 6px; font: 800 28px/1 var(--upc-display); text-transform: uppercase; color: var(--upc-orange); }
+.upc-live span { width: 12px; height: 12px; border-radius: 50%; background: var(--upc-orange); animation: upc-pulse 1.4s ease-in-out infinite; }
+@keyframes upc-pulse { 50% { opacity: .3; } }
+
+.upc-desc { margin: 4px 0 28px; font: 400 21px/1.6 var(--upc-sans); color: rgba(246, 241, 234, .9); }
+.upc-actions { margin-top: auto; display: flex; flex-wrap: wrap; gap: 16px; }
+.upc-btn {
+  display: inline-block; border-radius: 999px; padding: 15px 28px; font: 700 18px/1.2 var(--upc-sans);
+  letter-spacing: .02em; transition: background .2s, color .2s, border-color .2s, transform .2s;
+}
+.upc-btn:hover { text-decoration: none; transform: translateY(-1px); }
+.upc-btn--primary { background: var(--upc-orange); color: var(--upc-ink); border: 1px solid var(--upc-orange); }
+.upc-btn--primary:hover { background: #ff7650; color: var(--upc-ink); }
+.upc-btn--ghost { color: var(--upc-cream); border: 1px solid rgba(246, 241, 234, .35); }
+.upc-btn--ghost:hover { border-color: var(--upc-cream); color: var(--upc-cream); }
+.upc a:focus-visible { outline: 3px solid var(--upc-orange); outline-offset: 3px; }
+
+@media (max-width: 991px) {
+  .upc-grid { grid-template-columns: 1fr; }
+  .upc-card { min-height: 0; }
+}
+@media (max-width: 575px) {
+  .upc { padding: 56px 0 64px; }
+  .upc-title { margin-bottom: 32px; }
+  .upc-card__body { padding: 64px 22px 26px; }
+  .upc-count li { width: calc((100% - 36px) / 4); }
+  .upc-count b { font-size: 32px; }
+  .upc-desc { font-size: 17px; }
+  .upc-btn { width: 100%; text-align: center; padding: 14px 20px; font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .upc-live span { animation: none; } }

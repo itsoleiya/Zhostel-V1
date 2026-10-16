@@ -2,28 +2,34 @@
 .site-header__bar { position: relative; height: 68px; font-size: 14px; }
 .site-header__phone { position: absolute; padding-top: 20px; }
 .site-header__phone a:hover { text-decoration: none; opacity: .8; }
-.site-header__share { position: absolute; right: 15px; top: 70px; display: flex; align-items: center; gap: 6px; }
-.site-header__share b { font-weight: 700; position: relative; padding-left: 20px; transition: margin .5s; }
-.site-header__share b::before { content: "\2192"; position: absolute; left: 0; font-weight: 400; font-size: 11px; top: 1px; }
-.site-header__share-btns { display: inline-flex; overflow: hidden; max-width: 0; opacity: 0; transition: all .3s; gap: 6px; }
+.site-header__share { position: absolute; right: 12px; top: 70px; display: flex; align-items: center; }
+.site-header__share b { font-weight: 700; position: relative; transition: margin .5s; }
+.site-header__share-btns a { display: inline-grid; place-items: center; width: 20px; margin: 0 3px; }
+.site-header__share b::before { content: "\2192"; position: absolute; left: -20px; font-weight: 400; font-size: 11px; top: 1px; }
+.site-header__share-btns { display: inline-flex; align-items: center; gap: 4px; height: 25px; overflow: hidden; max-width: 0; opacity: 0; transition: all .3s; }
+.site-header__share:hover b, .site-header__share:focus-within b { margin-right: 30px; }
+.site-header__share:hover b::before, .site-header__share:focus-within b::before { opacity: 0; }
 .site-header__share:hover .site-header__share-btns,
 .site-header__share:focus-within .site-header__share-btns { max-width: 90px; opacity: 1; }
+.site-header__share b::before { transition: opacity .3s; }
 @media (hover: none) { .site-header__share-btns { max-width: 90px; opacity: 1; } }
 
 /* Rotated menu tab: white box, "Z Hostel" in the theme's unloaded Raleway (serif fallback). */
 .menu-tab {
   position: fixed; z-index: 40; left: 0; top: 60%;
   transform: rotate(-90deg); transform-origin: 0 0;
-  background: #fff; border: 0; color: #333; padding: 30px; display: flex; align-items: center; gap: 30px;
+  background: #fff; border: 0; color: #333; padding: 40px; display: block; text-align: left;
   transition: padding .3s, left .3s, opacity .3s;
 }
-.menu-tab b { font: 800 40px/40px var(--font-display-bare); }
-.menu-tab:hover { padding-top: 50px; }
-.menu-tab__lines { width: 21px; height: 30px; display: flex; gap: 6px; transform: rotate(180deg); align-items: center; }
-.menu-tab__lines span { width: 1px; height: 28px; background: #000; transition: height .3s; }
+@media (min-width: 1224px) { .menu-tab { padding: 30px; } }
+.menu-tab:hover { padding: 60px 40px 40px; }
+.menu-tab b { position: relative; font: 800 40px/40px var(--font-display-bare); margin-left: 30px; display: inline-block; }
+.menu-tab__lines { width: 21px; position: absolute; transform: rotate(180deg); margin-top: 7px; transition: margin .3s; }
+.menu-tab:hover .menu-tab__lines { margin-top: -15px; }
+.menu-tab__lines span { display: block; float: left; width: 1px; height: 28px; margin: 7px 3px 0; background: #000; transition: height .3s; transform-origin: 100%; }
 .menu-tab:hover .menu-tab__lines span:nth-child(1),
 .menu-tab:hover .menu-tab__lines span:nth-child(3) { height: 0; }
-.menu-tab:hover .menu-tab__lines span:nth-child(2) { height: 40px; }
+.menu-tab:hover .menu-tab__lines span:nth-child(2) { height: 50px; }
 .menu-tab.is-hidden { opacity: 0; pointer-events: none; }
 
 .menu-scrim { position: fixed; inset: 0; z-index: 44; background: rgba(0,0,0,.4); opacity: 0; pointer-events: none; transition: opacity .4s; }
@@ -63,13 +69,26 @@
 .menu-panel__social a { color: #eee; }
 
 @media (max-width: 767px) {
-  .site-header__phone { font-size: 12px; }
-  .site-header__share { top: 44px; }
-  .menu-tab { padding: 14px 18px; gap: 16px; top: 70%; }
-  .menu-tab b { font-size: 26px; line-height: 26px; }
-  .menu-tab:hover { padding-top: 14px; }
+}
+/* Theme rule (max-width: 769px): 50px square menu button, no phone number, share icons shown,
+   full-width menu panel, links 800 20px/27px, social icons 14px. */
+@media (max-width: 769px) {
+  .site-header__phone { display: none; }
+  .site-header__share { top: 12px; }
+  .site-header__share-btns { max-width: 90px; opacity: 1; }
+  .site-header__share b { margin-right: 30px; }
+  .site-header__share b::before { opacity: 0; }
+  .menu-tab { top: 50px; padding: 5px 14px; min-width: 50px; min-height: 50px; z-index: 40; }
+  .menu-tab:hover { padding: 5px 14px; }
+  .menu-tab b { display: none; }
   .menu-panel { width: 100%; left: -100%; }
   .menu-panel__logo { display: none; }
   .menu-panel__body { width: auto; left: 40px; right: 30px; transform: translateY(-50%); }
-  .menu-panel li a, .menu-panel li.is-long a { font-size: 24px; line-height: 24px; margin: 10px 0; }
+  .menu-panel li a { font-size: 20px; line-height: 27px; }  /* the two long items keep 33px/47px (!important in site CSS) */
+  .menu-panel__social a svg { width: 14px; height: 14px; }
+}
+/* Site custom CSS (max-width: 767px): links 24px, the two long items 24px/24px, 10px spacing. */
+@media (max-width: 767px) {
+  .menu-panel li a { font-size: 24px; line-height: 27px; margin: 10px 0; }
+  .menu-panel li.is-long a { font-size: 24px; line-height: 24px; margin: 10px 0; }
 }

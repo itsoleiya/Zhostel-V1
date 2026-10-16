@@ -1,9 +1,10 @@
-.book-float {
-  position: fixed; right: 0; bottom: 120px; z-index: 25;
-  background: var(--yellow); color: #fff; font: 700 16px/1 var(--font-display);
-  text-transform: uppercase; letter-spacing: 1px; padding: 14px 18px;
+/* .self-checkin on the live site: fixed wrapper; the link is inline with padding. */
+.book-float { position: fixed; right: 0; bottom: 135px; z-index: 25; }
+.book-float a {
+  padding: 15px 20px; background: #fcbf36; color: #fff; font: 700 16px/25px var(--font-body);
+  text-transform: uppercase; letter-spacing: 1px;
 }
-.book-float:hover { text-decoration: none; background: #f0b400; }
+.book-float a:hover { text-decoration: none; }
 .back-to-top {
   position: fixed; right: 40px; bottom: 0; z-index: 24; background: none; border: 0; color: #333;
   opacity: 0; pointer-events: none; transition: all .3s;
@@ -11,7 +12,10 @@
 .back-to-top.is-visible { opacity: 1; bottom: 40px; pointer-events: auto; }
 .back-to-top:hover { color: #000; }
 @media (max-width: 767px) {
-  .book-float { font-size: 13px; padding: 10px 12px; bottom: 80px; }
   .back-to-top { right: 14px; }
   .back-to-top.is-visible { bottom: 14px; }
+}
+@media (max-width: 768px) {
+  .book-float { bottom: 175px; right: -146px; transform: rotate(90deg); transform-origin: left top 0; }
+  .book-float a { padding: 5px 15px; font-size: 14px; }
 }

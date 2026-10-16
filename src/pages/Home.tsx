@@ -6,6 +6,7 @@ import { exploreZ, heroes, homeAmenities, homeCtas, homeReviews, pageMeta } from
 import { site } from "../data/site";
 import { assetUrl } from "../utils/assets";
 import { usePageMeta } from "../utils/meta";
+import Upcoming from "../components/Upcoming";
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
     <>
       <Hero data={heroes.home} />
       <main id="content">
+        <Upcoming />
         <section className="section section--grey" id="con_zexplore">
           <div className="container text-center">
             <SectionTitle>Explore Z</SectionTitle>

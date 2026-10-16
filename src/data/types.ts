@@ -90,3 +90,20 @@ export interface Post {
   contentHtml: string;
   sourceUrl: string;
 }
+
+export interface UpcomingEvent {
+  id: string;
+  tag: string;                 // orange pill, e.g. "Salakot opening night · Halloween"
+  title: string;
+  dateText: string;            // as published
+  venue: string;
+  /** Countdown target, with Manila offset. */
+  startsAt: string;
+  /** Card disappears after this time. */
+  endsAt: string;
+  description: string;
+  image: string;               // full URL of the source picture
+  imageAlt: string;
+  primary: { label: string; url: string };
+  secondary: { label: string; url: string };
+}

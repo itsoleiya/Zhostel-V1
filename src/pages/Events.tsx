@@ -6,6 +6,7 @@ import { heroes, pageMeta } from "../data/pages";
 import { assetUrl } from "../utils/assets";
 import { usePageMeta } from "../utils/meta";
 import "./pages.css";
+import Upcoming from "../components/Upcoming";
 
 export default function Events() {
   usePageMeta({ title: pageMeta.events.title, path: pageMeta.events.slug });
@@ -13,6 +14,7 @@ export default function Events() {
     <>
       <Hero data={heroes.events} />
       <main id="content">
+        <Upcoming id="coming-up-events" />
         <section className="section section--grey" id="activities">
           <div className="container text-center">
             <SectionTitle>Activities</SectionTitle>
