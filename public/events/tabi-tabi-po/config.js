@@ -28,7 +28,7 @@ window.TTP_CONFIG = {
     { date: "2026-10-30", label: "Fri, Oct 30", startISO: "2026-10-30T18:00:00+08:00" },
     { date: "2026-10-31", label: "Sat, Oct 31", startISO: "2026-10-31T18:00:00+08:00" }
   ],
-  timeLabel: "6:00PM",
+  timeLabel: "6:00PM onwards",
 
   venue: "Salakot at Z Hostel",
   address: "5660 Don Pedro Street, Poblacion, Makati",
