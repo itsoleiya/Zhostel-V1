@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /events/tabi-tabi-po/admin.html
 
 Sitemap: https://soleiyait8.github.io/Zhostel-V1/sitemap.xml
