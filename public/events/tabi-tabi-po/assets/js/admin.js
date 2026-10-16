@@ -286,6 +286,7 @@
 
   /* ---------- Scan confirmation pop-up ---------- */
   var pop = $("#scan-pop"), popTimer = null, popOpen = false, audioCtx = null, pendingConfirm = null;
+  var scanSource = null, scanSeq = 0;   // "camera" or "typed"; seq drops answers that arrive after Cancel
   function beep(kind) {
     try {
       audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
@@ -311,15 +312,20 @@
     });
     dl.hidden = !dl.children.length;
     $("#scan-pop-note").textContent = o.note || "";
+    var badge = $("#scan-pop-badge");
+    badge.textContent = scanSource === "camera" ? "\u2713 Scan complete" : scanSource === "typed" ? "\u2713 Code entered" : "";
+    badge.hidden = !badge.textContent;
     var cb = $("#scan-pop-confirm"), nb = $("#scan-pop-next");
     pendingConfirm = o.onConfirm || null;
     cb.hidden = !pendingConfirm; cb.disabled = false; cb.textContent = o.confirmLabel || "Register guest";
-    nb.textContent = pendingConfirm ? "Cancel" : "Scan next guest";
+    nb.textContent = o.nextLabel || (pendingConfirm ? "Cancel" : "Scan next guest");
     $("#scan-result").hidden = true;
     pop.hidden = false; popOpen = true;
     if (scanner) { try { scanner.pause(true); } catch (e) {} }
-    beep(o.kind === "confirm" ? "ok" : o.kind);
-    if (navigator.vibrate) navigator.vibrate(o.kind === "ok" || o.kind === "confirm" ? 120 : [80, 60, 80, 60, 80]);
+    if (!o.silent) {
+      beep(o.kind === "confirm" || o.kind === "looking" ? "ok" : o.kind);
+      if (navigator.vibrate) navigator.vibrate(o.kind === "ok" || o.kind === "confirm" || o.kind === "looking" ? 120 : [80, 60, 80, 60, 80]);
+    }
     var timer = $("#scan-pop-timer"); timer.classList.remove("run"); clearTimeout(popTimer);
     if (o.kind === "ok") {            // green closes itself; amber/red wait for staff
       void timer.offsetWidth; timer.style.setProperty("--pop-ms", "6000ms"); timer.classList.add("run"); timer.hidden = false;
@@ -330,7 +336,7 @@
   function hidePop() {
     clearTimeout(popTimer);
     if (!popOpen) return;
-    popOpen = false; pop.hidden = true; pendingConfirm = null;
+    popOpen = false; pop.hidden = true; pendingConfirm = null; scanSeq++;
     lastAt = Date.now();   // same QR still in front of the camera is ignored for a few seconds; other codes scan right away
     if (scanner) { try { scanner.resume(); } catch (e) {} }
     var m = $("#manual-code"); if (m && !scanner) m.focus();
@@ -358,16 +364,24 @@
   }
 
   /* Step 1: a scan (or typed code) only LOOKS UP the guest. Nothing is recorded yet. */
-  function checkIn(code) {
+  function checkIn(code, source) {
     code = (code || "").trim().toUpperCase();
     if (!code || busy || popOpen) return;
     var now = Date.now();
     if (code === lastCode && now - lastAt < 5000) return;
     lastCode = code; lastAt = now; busy = true;
+    scanSource = source || "typed";
+    var seq = ++scanSeq, already = false;
     var found = findGuest(code);
+    if (!found) {   // lookup needs the network: confirm the scan right away so staff aren't left waiting
+      showPop({ kind: "looking", kicker: "Looking up ticket\u2026", title: code, note: "Checking the guest list.", nextLabel: "Cancel" });
+      already = true;
+    }
     // Not in the loaded list? They may have RSVP'd after this page was opened: refresh once.
     (found ? Promise.resolve(found) : load(true).then(function () { return findGuest(code); }))
       .then(function (g) {
+        if (seq !== scanSeq) return;          // staff pressed Cancel while we were looking it up
+        if (already) popOpen = false;
         if (!g) {
           showPop({ kind: "bad", kicker: "Not registered", title: "Ticket not found", facts: [["Code", code]],
             note: "This code isn't on the Tabi Tabi Po guest list. Check the code, or search their name in the guest list." });
@@ -392,7 +406,7 @@
             onConfirm: function () { registerGuest(code); } });
         }
       })
-      .catch(function (ex) { showPop({ kind: "bad", kicker: "Couldn't look up ticket", title: "Connection problem", note: ex.message + " Try again, or type the code." }); })
+      .catch(function (ex) { if (seq !== scanSeq) return; popOpen = false; showPop({ kind: "bad", kicker: "Couldn't look up ticket", title: "Connection problem", note: ex.message + " Try again, or type the code." }); })
       .then(function () { busy = false; });
   }
 
@@ -441,7 +455,7 @@
     if (scanner) return;
     $("#cam-msg").textContent = "Starting camera\u2026";
     var cfg = { fps: 10, qrbox: function (w, h) { var s = Math.floor(Math.min(w, h) * 0.7); return { width: s, height: s }; } };
-    var onScan = function (text) { checkIn(text); };
+    var onScan = function (text) { checkIn(text, "camera"); };
     scanner = new Lib("reader");
     function ready() { $("#cam-msg").textContent = "Point the camera at the guest's QR code."; }
     // Rear camera on phones; laptops/desktops only have a front webcam, so fall back to any camera.
@@ -470,7 +484,7 @@
   scanModal.addEventListener("close", function () { hidePop(); stopScanner(); });
   scanModal.addEventListener("cancel", function (e) { if (popOpen) { e.preventDefault(); hidePop(); } });
   $("#manual-form").addEventListener("submit", function (e) {
-    e.preventDefault(); lastCode = null; checkIn($("#manual-code").value); $("#manual-code").value = "";
+    e.preventDefault(); lastCode = null; checkIn($("#manual-code").value, "typed"); $("#manual-code").value = "";
   });
 
   var passModal = $("#pass-modal"), forced = false;
