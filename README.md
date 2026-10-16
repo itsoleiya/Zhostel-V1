@@ -115,6 +115,15 @@ The website still reads its content from `src/data/`. Switching the pages to rea
 
 The dark "Coming up / Halloween at Z" block (Home, after the hero, and top of Events & Activities) is driven by `src/data/upcoming.ts`. Each card has a countdown to `startsAt` (Manila time), switches to "Happening now" during the event, and disappears after `endsAt`; the whole block hides when no events are left. Copy and pictures come from https://zhostel.github.io/events/ (Tabi Tabi Po RSVP links to https://soleiyait8.github.io/tabi-tabi-po/) (pictures are linked from zhostel.github.io and ody-z.com). THE ODY-Z start time (6PM) isn't published anywhere; update `startsAt` if it differs.
 
+## Tabi Tabi Po RSVP page (`/events/tabi-tabi-po/`)
+
+Static page in `public/events/tabi-tabi-po/`, recreated from itsoleiya.github.io/tabi-tabi-po and wired into this site. Settings (dates, links, Supabase keys) are in its `config.js`.
+
+- **Database:** Supabase "Zhostel V1", tables `tabi_rsvps`, `tabi_checkins`, `tabi_sponsor_inquiries`, `tabi_marketing_contacts`, `tabi_admin_settings`, `tabi_admin_attempts`. The browser can't read them; everything goes through the `rsvp_*`, `sponsor_*` and `admin_*` functions. Migrations: `supabase/migrations/20261016040*_tabi_*.sql`.
+- **Staff:** `/events/tabi-tabi-po/admin.html` (guest list, sponsor inquiries, door check-in scanner). The first login forces a passcode change.
+- **Privacy:** a daily job (pg_cron `tabi-retention`) deletes the guest list after 2027-01-29, keeping only marketing opt-ins.
+- Ticket emails are not sent (removed in the original too); guests keep the QR on screen, download it, or recover it by RSVPing again with the same email.
+
 ## Booking
 
 Every "Book Now" links to the existing Cloudbeds page (`hotels.cloudbeds.com/reservation/oL7RdR`). The site does not check availability or take reservations itself.
