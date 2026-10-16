@@ -124,3 +124,15 @@ tbody tr:hover{ background:rgba(242,239,230,.04); }
 .scan-pop-confirm[disabled]{ opacity:.7; cursor:progress; }
 .scan-pop-confirm:focus-visible{ outline:3px solid #fff; outline-offset:3px; }
 .scan-pop.confirm .scan-pop-next{ background:transparent; color:#fff; border:2px solid rgba(255,255,255,.4); }
+
+/* "Scan complete" badge: shown on every pop-up that came from a camera scan */
+.scan-pop-badge{ display:inline-flex; align-items:center; gap:6px; margin:0 0 12px; padding:6px 14px; border-radius:999px;
+  font:900 14px/1 var(--display, system-ui); letter-spacing:.14em; text-transform:uppercase;
+  background:rgba(255,255,255,.2); color:inherit; animation:pop-in .22s cubic-bezier(.2,.9,.3,1.3); }
+.scan-pop.confirm .scan-pop-badge, .scan-pop.looking .scan-pop-badge{ background:#1f9d55; color:#fff; }
+.scan-pop.warn .scan-pop-badge{ background:rgba(0,0,0,.14); }
+/* Lookup in progress right after a scan */
+.scan-pop.looking .scan-pop-card{ background:#1d1c1a; color:#fff; border:3px solid #1f9d55; }
+.scan-pop.looking .scan-pop-icon{ background:transparent; border:5px solid rgba(255,255,255,.2); border-top-color:#1f9d55; animation:pop-spin .8s linear infinite; }
+.scan-pop.looking .scan-pop-next{ background:transparent; color:#fff; border:2px solid rgba(255,255,255,.4); }
+@keyframes pop-spin{ to{ transform:rotate(360deg); } }
