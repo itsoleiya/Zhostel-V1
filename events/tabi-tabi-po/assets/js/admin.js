@@ -421,7 +421,7 @@
           note: "Let them in. Enjoy the night!" });
       else if (r.result === "test_ok")
         showPop({ kind: "ok", kicker: "\u2713 Valid ticket", title: g.full_name, facts: guestFacts(g, code),
-          note: "This ticket is good for " + nightsText(g) + ". Check-ins are recorded on " + (CFG.dateLabel || "the event nights") + " only." });
+          note: "This ticket is good for " + (nightsText(g) === "Both" ? "both nights" : nightsText(g)) + ". Check-ins are recorded on " + (CFG.dateLabel || "the event nights") + " only." });
       else if (r.result === "already")
         showPop({ kind: "warn", kicker: "Already checked in", title: g.full_name, facts: guestFacts(g, code).concat([["Scanned at", fmtDate(g.checked_in_at)]]),
           note: "Another device checked this ticket in first. If this person isn't " + g.full_name + ", it's a copied QR." });
