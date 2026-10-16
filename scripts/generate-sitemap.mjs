@@ -23,5 +23,5 @@ if (!existsSync("dist")) { console.error("dist/ not found — run vite build fir
 writeFileSync("dist/sitemap.xml", xml);
 // GitHub Pages has no rewrites: it serves 404.html for unknown paths, so make that the app too.
 copyFileSync("dist/index.html", "dist/404.html");
-writeFileSync("dist/robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${site}/sitemap.xml\n`);
+writeFileSync("dist/robots.txt", `User-agent: *\nAllow: /\nDisallow: /events/tabi-tabi-po/admin.html\n\nSitemap: ${site}/sitemap.xml\n`);
 console.log(`sitemap.xml: ${urls.length} URLs for ${site}`);
