@@ -114,3 +114,13 @@ tbody tr:hover{ background:rgba(242,239,230,.04); }
 @keyframes pop-in{ from{transform:scale(.85); opacity:0} to{transform:scale(1); opacity:1} }
 @keyframes pop-timer{ from{transform:scaleX(1)} to{transform:scaleX(0)} }
 @media (prefers-reduced-motion: reduce){ .scan-pop, .scan-pop-card{ animation:none; } .scan-pop-timer{ display:none; } }
+
+/* Step 1 of check-in: guest found, waiting for staff to confirm */
+.scan-pop.confirm .scan-pop-card{ background:#1d1c1a; color:#fff; border:3px solid #f5c518; }
+.scan-pop.confirm .scan-pop-icon{ background:#f5c518; color:#131311; }
+.scan-pop.confirm .scan-pop-icon::before{ content:"\2605"; font-size:40px; }
+.scan-pop.confirm .scan-pop-kicker{ color:#f5c518; }
+.scan-pop-confirm{ width:100%; font-size:19px; padding:16px 18px; margin-bottom:10px; background:#f5c518; color:#131311; border-color:#f5c518; font-weight:900; }
+.scan-pop-confirm[disabled]{ opacity:.7; cursor:progress; }
+.scan-pop-confirm:focus-visible{ outline:3px solid #fff; outline-offset:3px; }
+.scan-pop.confirm .scan-pop-next{ background:transparent; color:#fff; border:2px solid rgba(255,255,255,.4); }
