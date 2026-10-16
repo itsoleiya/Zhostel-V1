@@ -214,9 +214,16 @@
       </div>
       <p class="fine" id="email-note">Lost it later? Come back here and RSVP again with the same email. You'll get the same ticket.</p>
       <div class="ticket-actions">
-        <button class="btn" type="button" id="download-ticket">Download ticket</button>
+        <button class="btn" type="button" id="download-ticket">Save ticket (QR image)</button>
+      </div>
+      <div class="ticket-save" id="ticket-save" hidden>
+        <p class="fine" id="ticket-save-note">Press and hold the ticket below, then choose <b>Save image</b> / <b>Add to Photos</b>. A screenshot works at the door too.</p>
+        <img id="ticket-img" alt="Your Tabi Tabi Po ticket with QR code">
+      </div>
+      <p class="fine cal-label">Optional: add the event to your calendar</p>
+      <div class="ticket-actions cal-actions">
         <span id="cal-google-wrap" class="cal-wrap"></span>
-        <a class="btn ghost" id="cal-ics" href="#" download="tabi-tabi-po.ics" hidden>Add to Apple / Outlook</a>
+        <a class="btn ghost" id="cal-ics" href="#" download="tabi-tabi-po.ics" hidden>Calendar file (Apple / Outlook)</a>
       </div>
       <div class="stay-card" id="stay-card">
         <div>

@@ -377,6 +377,8 @@
     } else {
       qrBox.textContent = "QR couldn't load. Show this code at the door: " + t.code;
     }
+    $("#ticket-save").hidden = true;
+    prepareTicketImage(t);
     setProgress(TOTAL_STEPS + 1);
     step.focus({ preventScroll: true });
     $("#rsvp").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -436,17 +438,65 @@
     });
   }
 
+  /* ---------- Save the ticket image (works in phone browsers and Instagram/Facebook in-app browsers) ---------- */
+  var UA = navigator.userAgent || "";
+  var IN_APP = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|Line\/|TikTok|musical_ly|Snapchat/i.test(UA);
+  var MOBILE = /Android|iPhone|iPad|iPod/i.test(UA) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var ticketImage = { code: null, blob: null, promise: null };
+
+  function prepareTicketImage(t) {
+    if (ticketImage.code === t.code && ticketImage.promise) return ticketImage.promise;
+    ticketImage = { code: t.code, blob: null, promise: null };
+    ticketImage.promise = (document.fonts ? document.fonts.ready : Promise.resolve())
+      .then(function () { return drawTicketPNG(t); })
+      .then(function (blob) { if (ticketImage.code === t.code) ticketImage.blob = blob; return blob; })
+      .catch(function () { return null; });
+    return ticketImage.promise;
+  }
+
+  function showTicketImage(blob) {
+    var img = $("#ticket-img");
+    if (img.dataset.url) URL.revokeObjectURL(img.dataset.url);
+    img.dataset.url = URL.createObjectURL(blob);
+    img.src = img.dataset.url;
+    var box = $("#ticket-save"); box.hidden = false;
+    box.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function deliverTicket(blob, t) {
+    var name = "tabi-tabi-po-" + t.code + ".png";
+    // In-app browsers (Instagram, Facebook, Messenger...) silently block downloads: show the image to press-and-hold.
+    if (IN_APP) { showTicketImage(blob); return; }
+    if (MOBILE && navigator.share && navigator.canShare && window.File) {
+      var file = null;
+      try { file = new File([blob], name, { type: "image/png" }); } catch (e) {}
+      if (file && navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file], title: "Tabi Tabi Po ticket" }).catch(function (e) {
+          if (!e || e.name !== "AbortError") showTicketImage(blob); // share failed -> press-and-hold fallback
+        });
+        return;
+      }
+    }
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a"); a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    if (MOBILE) showTicketImage(blob); // backup in case the phone ignored the download
+  }
+
   function initTicketActions() {
     $("#download-ticket").addEventListener("click", function () {
       var t = state.ticket || loadLocal(); if (!t) return;
-      var btn = this; btn.disabled = true; $("#ticket-error").textContent = "";
-      (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () { return drawTicketPNG(t); }).then(function (blob) {
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a"); a.href = url; a.download = "tabi-tabi-po-" + t.code + ".png";
-        document.body.appendChild(a); a.click(); a.remove();
-        setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      $("#ticket-error").textContent = "";
+      // Use the image prepared when the ticket appeared, so the phone's share/save sheet opens straight
+      // from the tap (Safari blocks it if we make the user wait first).
+      if (ticketImage.code === t.code && ticketImage.blob) { deliverTicket(ticketImage.blob, t); return; }
+      var btn = this; btn.disabled = true;
+      prepareTicketImage(t).then(function (blob) {
+        if (!blob) throw new Error("no image");
+        deliverTicket(blob, t);
       }).catch(function () {
-        $("#ticket-error").textContent = "Download didn't work on this browser. Take a screenshot of the ticket instead.";
+        $("#ticket-error").textContent = "Saving didn't work on this browser. Take a screenshot of the ticket instead. It works at the door.";
       }).then(function () { btn.disabled = false; });
     });
 
