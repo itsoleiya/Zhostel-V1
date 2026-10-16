@@ -401,8 +401,8 @@
         } else {
           showPop({ kind: "confirm", kicker: star + "Registered guest", title: g.full_name, facts: guestFacts(g, code),
             note: isNight ? "Check their ID shows this name, then tap Register guest."
-                          : "Today isn't an event night: tapping Register guest runs a test and records nothing.",
-            confirmLabel: isNight ? "Register guest" : "Register guest (test)",
+                          : "Check their ID shows this name, then tap Register guest. Check-ins are recorded on " + (CFG.dateLabel || "the event nights") + " only.",
+            confirmLabel: "Register guest",
             onConfirm: function () { registerGuest(code); } });
         }
       })
@@ -420,8 +420,8 @@
         showPop({ kind: "ok", kicker: "\u2713 Guest registered \u00b7 Checked in", title: g.full_name, facts: guestFacts(g, code),
           note: "Let them in. Enjoy the night!" });
       else if (r.result === "test_ok")
-        showPop({ kind: "ok", kicker: "\u2713 Test OK", title: g.full_name, facts: guestFacts(g, code),
-          note: "Ticket is valid. Today isn't an event night, so nothing was recorded." });
+        showPop({ kind: "ok", kicker: "\u2713 Valid ticket", title: g.full_name, facts: guestFacts(g, code),
+          note: "This ticket is good for " + nightsText(g) + ". Check-ins are recorded on " + (CFG.dateLabel || "the event nights") + " only." });
       else if (r.result === "already")
         showPop({ kind: "warn", kicker: "Already checked in", title: g.full_name, facts: guestFacts(g, code).concat([["Scanned at", fmtDate(g.checked_in_at)]]),
           note: "Another device checked this ticket in first. If this person isn't " + g.full_name + ", it's a copied QR." });
