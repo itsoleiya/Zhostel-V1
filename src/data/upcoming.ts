@@ -24,7 +24,7 @@ export const upcomingEvents: UpcomingEvent[] = [
       "A night with the spirits of Philippine folklore. DJ sets all night, drinks at the bar, and best in costume for whoever brings the best myth from home.",
     image: "https://zhostel.github.io/events/tabi-tabi-po/assets/myths/whitelady-720.webp",
     imageAlt: "The White Lady, one of the Filipino myths of Tabi Tabi Po",
-    primary: { label: "RSVP for your QR ticket", url: "https://itsoleiya.github.io/tabi-tabi-po/" },
+    primary: { label: "RSVP for your QR ticket", url: "events/tabi-tabi-po/" }, // page inside this site (public/events/tabi-tabi-po)
     secondary: { label: "Stay for the party", url: site.bookingUrl },
   },
   {

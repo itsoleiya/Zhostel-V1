@@ -44,6 +44,8 @@ function isExternal(url: string) { return /^https?:\/\//.test(url); }
 
 function Btn({ href, kind, children }: { href: string; kind: "primary" | "ghost"; children: React.ReactNode }) {
   const ext = isExternal(href);
+  // Relative URLs point at static pages in this site (e.g. events/tabi-tabi-po/); prefix the deploy base.
+  if (!ext && !href.startsWith("/")) href = import.meta.env.BASE_URL + href;
   return (
     <a className={`upc-btn upc-btn--${kind}`} href={href} target={ext ? "_blank" : undefined} rel={ext ? "noopener noreferrer" : undefined}>
       {children}{ext && <span className="sr-only"> (opens in a new tab)</span>}

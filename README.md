@@ -113,7 +113,7 @@ The website still reads its content from `src/data/`. Switching the pages to rea
 
 ## "Coming up" events
 
-The dark "Coming up / Halloween at Z" block (Home, after the hero, and top of Events & Activities) is driven by `src/data/upcoming.ts`. Each card has a countdown to `startsAt` (Manila time), switches to "Happening now" during the event, and disappears after `endsAt`; the whole block hides when no events are left. Copy and pictures come from https://zhostel.github.io/events/ (Tabi Tabi Po RSVP links to https://itsoleiya.github.io/tabi-tabi-po/) (pictures are linked from zhostel.github.io and ody-z.com). THE ODY-Z start time (6PM) isn't published anywhere; update `startsAt` if it differs.
+The dark "Coming up / Halloween at Z" block (Home, after the hero, and top of Events & Activities) is driven by `src/data/upcoming.ts`. Each card has a countdown to `startsAt` (Manila time), switches to "Happening now" during the event, and disappears after `endsAt`; the whole block hides when no events are left. Copy and pictures come from https://zhostel.github.io/events/ (Tabi Tabi Po RSVP links to https://soleiyait8.github.io/tabi-tabi-po/) (pictures are linked from zhostel.github.io and ody-z.com). THE ODY-Z start time (6PM) isn't published anywhere; update `startsAt` if it differs.
 
 ## Booking
 
