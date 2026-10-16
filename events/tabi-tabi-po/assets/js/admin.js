@@ -285,7 +285,7 @@
   }
 
   /* ---------- Scan confirmation pop-up ---------- */
-  var pop = $("#scan-pop"), popTimer = null, popOpen = false, audioCtx = null;
+  var pop = $("#scan-pop"), popTimer = null, popOpen = false, audioCtx = null, pendingConfirm = null;
   function beep(kind) {
     try {
       audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
@@ -311,26 +311,36 @@
     });
     dl.hidden = !dl.children.length;
     $("#scan-pop-note").textContent = o.note || "";
+    var cb = $("#scan-pop-confirm"), nb = $("#scan-pop-next");
+    pendingConfirm = o.onConfirm || null;
+    cb.hidden = !pendingConfirm; cb.disabled = false; cb.textContent = o.confirmLabel || "Register guest";
+    nb.textContent = pendingConfirm ? "Cancel" : "Scan next guest";
     $("#scan-result").hidden = true;
     pop.hidden = false; popOpen = true;
     if (scanner) { try { scanner.pause(true); } catch (e) {} }
-    beep(o.kind);
-    if (navigator.vibrate) navigator.vibrate(o.kind === "ok" ? 120 : [80, 60, 80, 60, 80]);
+    beep(o.kind === "confirm" ? "ok" : o.kind);
+    if (navigator.vibrate) navigator.vibrate(o.kind === "ok" || o.kind === "confirm" ? 120 : [80, 60, 80, 60, 80]);
     var timer = $("#scan-pop-timer"); timer.classList.remove("run"); clearTimeout(popTimer);
     if (o.kind === "ok") {            // green closes itself; amber/red wait for staff
       void timer.offsetWidth; timer.style.setProperty("--pop-ms", "6000ms"); timer.classList.add("run"); timer.hidden = false;
       popTimer = setTimeout(hidePop, 6000);
     } else timer.hidden = true;
-    $("#scan-pop-next").focus();
+    (pendingConfirm ? cb : nb).focus();
   }
   function hidePop() {
     clearTimeout(popTimer);
     if (!popOpen) return;
-    popOpen = false; pop.hidden = true; lastCode = null;
+    popOpen = false; pop.hidden = true; pendingConfirm = null;
+    lastAt = Date.now();   // same QR still in front of the camera is ignored for a few seconds; other codes scan right away
     if (scanner) { try { scanner.resume(); } catch (e) {} }
     var m = $("#manual-code"); if (m && !scanner) m.focus();
   }
   $("#scan-pop-next").addEventListener("click", hidePop);
+  $("#scan-pop-confirm").addEventListener("click", function () {
+    if (!pendingConfirm) return;
+    var go = pendingConfirm; this.disabled = true; this.textContent = "Registering\u2026";
+    go();
+  });
 
   function guestFacts(g, code) {
     return [
@@ -342,37 +352,77 @@
     ];
   }
 
+  function findGuest(code) {
+    for (var i = 0; i < rows.length; i++) if ((rows[i].ticket_code || "").toUpperCase() === code) return rows[i];
+    return null;
+  }
+
+  /* Step 1: a scan (or typed code) only LOOKS UP the guest. Nothing is recorded yet. */
   function checkIn(code) {
     code = (code || "").trim().toUpperCase();
     if (!code || busy || popOpen) return;
     var now = Date.now();
-    if (code === lastCode && now - lastAt < 3000) return;
+    if (code === lastCode && now - lastAt < 5000) return;
     lastCode = code; lastAt = now; busy = true;
+    var found = findGuest(code);
+    // Not in the loaded list? They may have RSVP'd after this page was opened: refresh once.
+    (found ? Promise.resolve(found) : load(true).then(function () { return findGuest(code); }))
+      .then(function (g) {
+        if (!g) {
+          showPop({ kind: "bad", kicker: "Not registered", title: "Ticket not found", facts: [["Code", code]],
+            note: "This code isn't on the Tabi Tabi Po guest list. Check the code, or search their name in the guest list." });
+          return;
+        }
+        var isNight = eventNights.indexOf(tonight) > -1;
+        var star = g.guest_type && g.guest_type !== "guest" ? "\u2605 " + (TYPES[g.guest_type] || "") + " \u00b7 " : "";
+        if (g.status === "cancelled") {
+          showPop({ kind: "bad", kicker: "RSVP cancelled", title: g.full_name, facts: [["Ticket", code]],
+            note: "This RSVP was cancelled. Check with the event lead." });
+        } else if (isNight && g.nights && g.nights.indexOf(tonight) < 0) {
+          showPop({ kind: "bad", kicker: "Registered \u00b7 Wrong night", title: g.full_name, facts: guestFacts(g, code),
+            note: "This ticket is for " + nightsText(g) + ", not tonight (" + nightShort(tonight) + "). Check with the event lead." });
+        } else if (isNight && (g.checkins || []).indexOf(tonight) > -1) {
+          showPop({ kind: "warn", kicker: "Already checked in", title: g.full_name, facts: guestFacts(g, code).concat([["Scanned at", fmtDate(g.checked_in_at)]]),
+            note: "This ticket was already used tonight. If this person isn't " + g.full_name + ", it's a copied QR. Check their ID." });
+        } else {
+          showPop({ kind: "confirm", kicker: star + "Registered guest", title: g.full_name, facts: guestFacts(g, code),
+            note: isNight ? "Check their ID shows this name, then tap Register guest."
+                          : "Today isn't an event night: tapping Register guest runs a test and records nothing.",
+            confirmLabel: isNight ? "Register guest" : "Register guest (test)",
+            onConfirm: function () { registerGuest(code); } });
+        }
+      })
+      .catch(function (ex) { showPop({ kind: "bad", kicker: "Couldn't look up ticket", title: "Connection problem", note: ex.message + " Try again, or type the code." }); })
+      .then(function () { busy = false; });
+  }
+
+  /* Step 2: staff tapped "Register guest" -> record the check-in. The database re-checks everything. */
+  function registerGuest(code) {
     rpc("admin_check_in", { p_passcode: pass || getPass(), p_event_slug: SLUG, p_ticket_code: code }).then(function (r) {
+      popOpen = false; // allow the result to replace the confirm pop-up
       if (!r.ok) { showPop({ kind: "bad", kicker: "Not signed in", title: "Session expired", note: "Close this and log in again." }); return; }
       var g = r.rsvp || {};
-      var star = g.guest_type && g.guest_type !== "guest" ? "\u2605 " + (TYPES[g.guest_type] || "") + " \u00b7 " : "";
       if (r.result === "checked_in")
-        showPop({ kind: "ok", kicker: star + "\u2713 Registered \u00b7 Checked in", title: g.full_name, facts: guestFacts(g, code),
-          note: "Valid ticket. Check their ID shows this name, then let them in." });
+        showPop({ kind: "ok", kicker: "\u2713 Guest registered \u00b7 Checked in", title: g.full_name, facts: guestFacts(g, code),
+          note: "Let them in. Enjoy the night!" });
       else if (r.result === "test_ok")
-        showPop({ kind: "ok", kicker: star + "\u2713 Registered", title: g.full_name, facts: guestFacts(g, code),
-          note: "Test scan: today isn't an event night, so no check-in was recorded." });
+        showPop({ kind: "ok", kicker: "\u2713 Test OK", title: g.full_name, facts: guestFacts(g, code),
+          note: "Ticket is valid. Today isn't an event night, so nothing was recorded." });
       else if (r.result === "already")
         showPop({ kind: "warn", kicker: "Already checked in", title: g.full_name, facts: guestFacts(g, code).concat([["Scanned at", fmtDate(g.checked_in_at)]]),
-          note: "This ticket was already used tonight. If this person isn't " + g.full_name + ", it's a copied QR. Check their ID." });
+          note: "Another device checked this ticket in first. If this person isn't " + g.full_name + ", it's a copied QR." });
       else if (r.result === "wrong_night")
         showPop({ kind: "bad", kicker: "Registered \u00b7 Wrong night", title: g.full_name, facts: guestFacts(g, code),
-          note: "This ticket is for " + nightsText(g) + ", not tonight (" + nightShort(r.night) + "). Check with the event lead." });
+          note: "This ticket is for " + nightsText(g) + ", not tonight (" + nightShort(r.night) + ")." });
       else if (r.result === "cancelled")
-        showPop({ kind: "bad", kicker: "RSVP cancelled", title: g.full_name, facts: [["Ticket", code]],
-          note: "This RSVP was cancelled. Check with the event lead." });
+        showPop({ kind: "bad", kicker: "RSVP cancelled", title: g.full_name, facts: [["Ticket", code]], note: "This RSVP was cancelled. Check with the event lead." });
       else
-        showPop({ kind: "bad", kicker: "Not registered", title: "Ticket not found", facts: [["Code", code]],
-          note: "This code isn't on the Tabi Tabi Po guest list. Check the code, or search their name in the guest list." });
-      if (g.id && r.result === "checked_in") { load(true); }
-    }).catch(function (ex) { showPop({ kind: "bad", kicker: "Couldn't check in", title: "Connection problem", note: ex.message + " Try again, or type the code." }); })
-      .then(function () { busy = false; });
+        showPop({ kind: "bad", kicker: "Not registered", title: "Ticket not found", facts: [["Code", code]], note: "This code isn't on the guest list." });
+      if (g.id) load(true);
+    }).catch(function (ex) {
+      var cb = $("#scan-pop-confirm"); cb.disabled = false; cb.textContent = "Try again";
+      $("#scan-pop-note").textContent = "Couldn't register: " + ex.message + " Tap Try again.";
+    });
   }
 
   /* ---------- Camera ---------- */
