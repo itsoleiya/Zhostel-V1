@@ -12,7 +12,8 @@ window.TTP_CONFIG = {
   eventSlug: "tabi-tabi-po-2026",
 
   // Public URL of this site (used for share links and promoter links).
-  siteUrl: "https://soleiyait8.github.io/Zhostel-V1/events/tabi-tabi-po/",
+  // null = use whatever domain the page is served from (works on GitHub Pages, staging and zhostel.com).
+  siteUrl: null,
 
   // Leave eventStartISO as null while the date is TBA.
   // When confirmed, e.g. "2026-10-31T21:00:00+08:00" — this turns on the countdown
