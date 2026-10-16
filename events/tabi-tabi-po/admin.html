@@ -135,12 +135,26 @@
   </div>
   <div id="reader" class="reader"></div>
   <p class="muted" id="cam-msg">Point the camera at the guest's QR code.</p>
+  <button class="btn small ghost" type="button" id="cam-retry" hidden>Try the camera again</button>
   <form class="manual" id="manual-form">
     <label class="sr-only" for="manual-code">Ticket code</label>
     <input type="text" id="manual-code" placeholder="Or type the code, e.g. TTP-7KX2QM" autocapitalize="characters" autocomplete="off">
     <button class="btn small" type="submit">Check in</button>
   </form>
   <div class="scan-result" id="scan-result" hidden></div>
+
+  <!-- Scan confirmation pop-up (covers the scanner until staff tap "Scan next guest") -->
+  <div class="scan-pop" id="scan-pop" hidden role="alertdialog" aria-modal="true" aria-labelledby="scan-pop-title" aria-describedby="scan-pop-note">
+    <div class="scan-pop-card">
+      <div class="scan-pop-icon" id="scan-pop-icon" aria-hidden="true"></div>
+      <p class="scan-pop-kicker" id="scan-pop-kicker"></p>
+      <h3 class="scan-pop-title" id="scan-pop-title"></h3>
+      <dl class="scan-pop-facts" id="scan-pop-facts"></dl>
+      <p class="scan-pop-note" id="scan-pop-note"></p>
+      <button class="btn scan-pop-next" type="button" id="scan-pop-next">Scan next guest</button>
+      <div class="scan-pop-timer" id="scan-pop-timer" aria-hidden="true"></div>
+    </div>
+  </div>
 </dialog>
 
 <dialog class="modal" id="pass-modal" aria-labelledby="pass-title">
