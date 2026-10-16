@@ -5,8 +5,8 @@ begin;
 create extension if not exists http with schema extensions;
 create temp table _src as
 select
-  (select content::jsonb from extensions.http_get('https://raw.githubusercontent.com/soleiyait8/Zhostel-V1/main/supabase/content.json')) as c,
-  (select content::jsonb from extensions.http_get('https://raw.githubusercontent.com/soleiyait8/Zhostel-V1/main/src/data/posts.json')) as p;
+  (select content::jsonb from extensions.http_get('https://raw.githubusercontent.com/itsoleiya/Zhostel-V1/main/supabase/content.json')) as c,
+  (select content::jsonb from extensions.http_get('https://raw.githubusercontent.com/itsoleiya/Zhostel-V1/main/src/data/posts.json')) as p;
 
 truncate public.site_settings, public.nav_items, public.pages, public.page_sections, public.section_images,
   public.features, public.feature_images, public.rooms, public.room_images, public.amenities, public.reviews,

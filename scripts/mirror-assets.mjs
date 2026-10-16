@@ -35,17 +35,5 @@ for (const p of list.slice(0, limit)) {
     await new Promise((r) => setTimeout(r, 150)); // be gentle with the origin server
   } catch (e) { failed.push(`${p} (${e.message})`); }
 }
-// Non-WordPress images the site uses, saved into public/ so nothing is hotlinked.
-const EXTRA = [["https://ody-z.com/assets/hero-wide.jpg", "public/events/ody-z/hero-wide.jpg"]];
-for (const [url, dest] of EXTRA) {
-  if (existsSync(dest)) { skipped++; continue; }
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(String(res.status));
-    mkdirSync(dirname(dest), { recursive: true });
-    writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
-    ok++;
-  } catch (e) { failed.push(`${url} (${e.message})`); }
-}
 console.log(`Downloaded ${ok}, already present ${skipped}, failed ${failed.length}.`);
 if (failed.length) { writeFileSync("mirror-failures.txt", failed.join("\n")); console.log("See mirror-failures.txt"); }

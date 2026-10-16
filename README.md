@@ -25,18 +25,16 @@ Requires Node 18 or newer.
 | Variable | Default | Purpose |
 | --- | --- | --- |
 | `VITE_SITE_URL` | `https://zhostel.com` | Public URL of this deployment. Used for canonical tags and the sitemap. Set it to the staging URL while testing so search engines don't see duplicates. |
-| `VITE_ASSET_ORIGIN` | `https://zhostel.com` | Where `/wp-content/...` files load from. Leave as-is while WordPress is live. |
+| `VITE_ASSET_ORIGIN` | empty | Where `/wp-content/...` files load from. Empty = this site's own copies in `public/wp-content` (standalone). |
 | `VITE_SUPABASE_URL` / `VITE_SUPABASE_PUBLISHABLE_KEY` | project "Zhostel V1" | Where contact form messages are saved (table `contact_messages`). Built in; override to use another project. |
 | `VITE_CONTACT_ENDPOINT` | empty | URL that accepts a JSON POST `{name, email, subject, message}` (Formspree, Basin, your own API). Empty = the form opens the visitor's email app with the message pre-filled. |
 | `VITE_LOAD_RALEWAY` | `false` | The live site names Raleway but never loads it, so visitors see Arial (and a serif in the menu). `false` reproduces that; `true` loads real Raleway. |
 
-## Before switching off WordPress
+## Standalone media
 
-1. `npm run mirror:assets` — copies ~1,750 files (all photos, srcset sizes, the cover video, both PDFs) into `public/wp-content/`. Expect a few hundred MB; files that are already missing on the live site are listed in `mirror-failures.txt`.
-2. Set `VITE_ASSET_ORIGIN=` (empty) in `.env` and rebuild. Every image now comes from your own deployment.
-3. Optionally run `npm run import:posts` one last time to capture any new posts.
+All photos, video and PDFs (1,758 files, ~283 MB) are committed in `public/wp-content/` and served by this site; nothing loads from the old WordPress server. Two images referenced by old blog posts were already missing on zhostel.com and remain missing (`2016/02/jeepney-300x225.jpg`, `2016/09/Smokeyard-Makati.jpg`).
 
-`public/wp-content` is git-ignored because of its size; deploy it with your host's file upload, or remove that line from `.gitignore` if your repo can hold it.
+`npm run mirror:assets` downloads any newly referenced files (only while WordPress is still online). Optionally run `npm run import:posts` one last time before WordPress is switched off.
 
 ## Editing content
 
@@ -113,7 +111,7 @@ The website still reads its content from `src/data/`. Switching the pages to rea
 
 ## "Coming up" events
 
-The dark "Coming up / Halloween at Z" block (Home, after the hero, and top of Events & Activities) is driven by `src/data/upcoming.ts`. Each card has a countdown to `startsAt` (Manila time), switches to "Happening now" during the event, and disappears after `endsAt`; the whole block hides when no events are left. Copy and pictures come from https://zhostel.github.io/events/ (Tabi Tabi Po RSVP links to https://soleiyait8.github.io/tabi-tabi-po/) (pictures are linked from zhostel.github.io and ody-z.com). THE ODY-Z start time (6PM) isn't published anywhere; update `startsAt` if it differs.
+The dark "Coming up / Halloween at Z" block (Home, after the hero, and top of Events & Activities) is driven by `src/data/upcoming.ts`. Each card has a countdown to `startsAt` (Manila time), switches to "Happening now" during the event, and disappears after `endsAt`; the whole block hides when no events are left. Copy originally from https://zhostel.github.io/events/; card pictures are stored locally in `public/events/`. THE ODY-Z start time (6PM) isn't published anywhere; update `startsAt` if it differs.
 
 ## Tabi Tabi Po RSVP page (`/events/tabi-tabi-po/`)
 

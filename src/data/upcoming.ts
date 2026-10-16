@@ -38,7 +38,7 @@ export const upcomingEvents: UpcomingEvent[] = [
     endsAt: "2026-11-21T04:00:00+08:00",
     description:
       "It comes home on November 20. A Poblacion homecoming street party across the whole block: Z Hostel, the Vine Building and the street in between. Costumes encouraged. 18+.",
-    image: "events/ody-z/hero-wide.jpg", // local copy in public/ (fetched by npm run mirror:assets)
+    image: "https://ody-z.com/assets/hero-wide.jpg", // from the ODY-Z site (company-owned); replace with a local copy in public/events/ when available
     imageAlt: "THE ODY-Z street party poster art",
     primary: { label: "See more at ody-z.com", url: "https://ody-z.com/" },
     secondary: { label: "Stay for the party", url: site.bookingUrl },
