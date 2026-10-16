@@ -442,7 +442,7 @@
   /* ---------- Camera ---------- */
   function camError(err) {
     var m = String((err && (err.name || err.message)) || err || "");
-    if (!window.isSecureContext) return "The camera needs a secure (https) page. Open the admin from https://soleiyait8.github.io.";
+    if (!window.isSecureContext) return "The camera needs a secure (https) page. Open the admin page over https.";
     if (/NotAllowed|Permission|denied/i.test(m)) return "Camera access is blocked. Click the camera or lock icon in the address bar, set Camera to Allow, then tap \u201cTry the camera again\u201d.";
     if (/NotFound|DevicesNotFound|Requested device not found|no camera/i.test(m)) return "No camera found on this device. Use a phone or tablet at the door, or type the ticket code below.";
     if (/NotReadable|TrackStart|Could not start|in use/i.test(m)) return "The camera is being used by another app (Zoom, Teams, Camera\u2026). Close it, then tap \u201cTry the camera again\u201d.";

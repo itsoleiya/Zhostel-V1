@@ -67,7 +67,7 @@ export default function Upcoming({ id = "coming-up" }: { id?: string }) {
         <div className="upc-grid">
           {live.map((e) => (
             <article className="upc-card" key={e.id} aria-labelledby={`${id}-${e.id}`}>
-              <img className="upc-card__img" src={e.image} alt={e.imageAlt} loading="lazy" decoding="async" />
+              <img className="upc-card__img" src={/^(https?:)?\/\//.test(e.image) ? e.image : import.meta.env.BASE_URL + e.image} alt={e.imageAlt} loading="lazy" decoding="async" />
               <div className="upc-card__body">
                 <p className="upc-pill"><span aria-hidden="true" />{e.tag}</p>
                 <h3 className="upc-card__title" id={`${id}-${e.id}`}>{e.title}</h3>

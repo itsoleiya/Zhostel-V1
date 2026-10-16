@@ -22,7 +22,7 @@ export const upcomingEvents: UpcomingEvent[] = [
     endsAt: "2026-11-01T04:00:00+08:00",
     description:
       "A night with the spirits of Philippine folklore. DJ sets all night, drinks at the bar, and best in costume for whoever brings the best myth from home.",
-    image: "https://zhostel.github.io/events/tabi-tabi-po/assets/myths/whitelady-720.webp",
+    image: "events/tabi-tabi-po/assets/myths/whitelady-720.webp", // local copy in public/
     imageAlt: "The White Lady, one of the Filipino myths of Tabi Tabi Po",
     primary: { label: "RSVP for your QR ticket", url: "events/tabi-tabi-po/" }, // page inside this site (public/events/tabi-tabi-po)
     secondary: { label: "Stay for the party", url: site.bookingUrl },
@@ -38,7 +38,7 @@ export const upcomingEvents: UpcomingEvent[] = [
     endsAt: "2026-11-21T04:00:00+08:00",
     description:
       "It comes home on November 20. A Poblacion homecoming street party across the whole block: Z Hostel, the Vine Building and the street in between. Costumes encouraged. 18+.",
-    image: "https://ody-z.com/assets/hero-wide.jpg",
+    image: "events/ody-z/hero-wide.jpg", // local copy in public/ (fetched by npm run mirror:assets)
     imageAlt: "THE ODY-Z street party poster art",
     primary: { label: "See more at ody-z.com", url: "https://ody-z.com/" },
     secondary: { label: "Stay for the party", url: site.bookingUrl },

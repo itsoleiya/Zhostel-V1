@@ -1,7 +1,9 @@
 const env = import.meta.env;
 
 export const SITE_URL = (env.VITE_SITE_URL ?? "https://zhostel.com").replace(/\/$/, "");
-export const ASSET_ORIGIN = (env.VITE_ASSET_ORIGIN ?? "https://zhostel.com").replace(/\/$/, "");
+// Where /wp-content/... files load from. Empty (default) = this deployment's own copies in public/wp-content,
+// prefixed with the base path (e.g. /Zhostel-V1/ on GitHub Pages). Set a full origin only for temporary hotlinking.
+export const ASSET_ORIGIN = (env.VITE_ASSET_ORIGIN || env.BASE_URL || "/").replace(/\/$/, "");
 export const CONTACT_ENDPOINT = env.VITE_CONTACT_ENDPOINT ?? "";
 
 // Supabase project "Zhostel V1". The publishable key is designed to be public: the database only

@@ -9,7 +9,10 @@ const ORIGIN = "https://zhostel.com";
 const limitArg = process.argv.indexOf("--limit");
 const limit = limitArg > -1 ? Number(process.argv[limitArg + 1]) : Infinity;
 
-const texts = readdirSync("src/data").map((f) => readFileSync(join("src/data", f), "utf8"));
+const texts = [
+  ...readdirSync("src/data").map((f) => readFileSync(join("src/data", f), "utf8")),
+  readFileSync("index.html", "utf8"), // favicon, touch icon, social image
+];
 const found = new Set();
 for (const t of texts) for (const m of t.matchAll(/\/wp-content\/[^\s"'`)<>,\\]+/g)) found.add(m[0]);
 // Template-literal paths in the .ts data files are written as `${U}/2019/03/x.jpg` with U = "/wp-content/uploads".
@@ -31,6 +34,18 @@ for (const p of list.slice(0, limit)) {
     ok++;
     await new Promise((r) => setTimeout(r, 150)); // be gentle with the origin server
   } catch (e) { failed.push(`${p} (${e.message})`); }
+}
+// Non-WordPress images the site uses, saved into public/ so nothing is hotlinked.
+const EXTRA = [["https://ody-z.com/assets/hero-wide.jpg", "public/events/ody-z/hero-wide.jpg"]];
+for (const [url, dest] of EXTRA) {
+  if (existsSync(dest)) { skipped++; continue; }
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(String(res.status));
+    mkdirSync(dirname(dest), { recursive: true });
+    writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
+    ok++;
+  } catch (e) { failed.push(`${url} (${e.message})`); }
 }
 console.log(`Downloaded ${ok}, already present ${skipped}, failed ${failed.length}.`);
 if (failed.length) { writeFileSync("mirror-failures.txt", failed.join("\n")); console.log("See mirror-failures.txt"); }

@@ -49,7 +49,7 @@ for (const [route, [title, desc, image]] of Object.entries(pageTitles)) {
     desc ? `<meta property="og:description" content="${esc(desc)}" />` : "",
   ].filter(Boolean).join("\n    ");
   html = html.replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(title.replace(/ \| Z Hostel$/, ""))}" />`);
-  if (image) html = html.replace(/<meta property="og:image" content="[^"]*" \/>/, `<meta property="og:image" content="${esc(/^https?:/.test(image) ? image : (env.VITE_ASSET_ORIGIN || "https://zhostel.com") + image)}" />`);
+  if (image) html = html.replace(/<meta property="og:image" content="[^"]*" \/>/, `<meta property="og:image" content="${esc(/^https?:/.test(image) ? image : (env.VITE_ASSET_ORIGIN || site) + image)}" />`);
   html = html.replace("</head>", `    ${extra}\n  </head>`);
   const file = route === "/" ? "dist/index.html" : `dist${route}index.html`;
   mkdirSync(dirname(file), { recursive: true });
