@@ -69,5 +69,5 @@
 
 .map-embed { position: relative; }
 .map-embed iframe { display: block; width: 100%; height: 450px; border: 0; background: #e5e5e5; }
-.map-embed__placeholder { position: absolute; inset: 0 0 26px; display: grid; place-items: center; color: #777; background: #e5e5e5; }
-.map-embed__link { display: inline-block; margin-top: 8px; font-size: 13px; color: #777; }
+.map-embed__placeholder { position: absolute; inset: 0 0 26px; display: grid; place-items: center; color: #4d4d4d; background: #e5e5e5; }
+.map-embed__link { display: inline-block; margin-top: 8px; font-size: 13px; color: #767676; }

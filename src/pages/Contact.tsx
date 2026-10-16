@@ -12,6 +12,7 @@ export default function Contact() {
     <>
       <Hero data={heroes.plain} />
       <main id="content">
+        <h1 className="sr-only">Contact Us</h1>
         <section className="section section--white" id="cta_getting_there">
           <div className="container">
             <div className="split-row">

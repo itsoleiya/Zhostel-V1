@@ -126,7 +126,7 @@ button { font: inherit; cursor: pointer; }
 
 /* "cus-link-button": small uppercase grey link (MORE / Download Menu PDF). */
 .text-link {
-  display: inline-block; color: #777; font-size: 14px; line-height: 25px; position: relative;
+  display: inline-block; color: #767676; font-size: 14px; line-height: 25px; position: relative;  /* #767676 = WCAG AA on white */
 }
 .text-link:hover { color: #000; text-decoration: none; }
 

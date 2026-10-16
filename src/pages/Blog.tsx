@@ -1,9 +1,10 @@
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Hero from "../components/Hero";
 import PostBody from "../components/PostBody";
 import { heroes, pageMeta } from "../data/pages";
 import { POSTS_PER_PAGE, posts } from "../data/posts";
 import { usePageMeta } from "../utils/meta";
+import NotFound from "./NotFound";
 import "./pages.css";
 
 /** Blog index. Like the original, each entry shows the full post, 10 per page, with Older/Newer links. */
@@ -12,9 +13,10 @@ export default function Blog() {
   const n = page ? Number(page) : 1;
   const pages = Math.ceil(posts.length / POSTS_PER_PAGE);
   const path = n === 1 ? "/blog/" : `/blog/page/${n}/`;
-  usePageMeta({ title: n === 1 ? pageMeta.blog.title : `Blog | Page ${n} of ${pages} | Z Hostel`, path });
+  const valid = Number.isInteger(n) && n >= 1 && n <= pages;
+  usePageMeta({ title: !valid ? "Page not found | Z Hostel" : n === 1 ? pageMeta.blog.title : `Blog | Page ${n} of ${pages} | Z Hostel`, path });
 
-  if (!Number.isInteger(n) || n < 1 || n > pages) return <Navigate to="/blog/" replace />;
+  if (!valid) return <NotFound />;
   const slice = posts.slice((n - 1) * POSTS_PER_PAGE, n * POSTS_PER_PAGE);
 
   return (
