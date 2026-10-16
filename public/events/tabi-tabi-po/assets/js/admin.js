@@ -282,48 +282,143 @@
     var box = $("#scan-result"); box.hidden = false; box.className = "scan-result " + kind; box.textContent = "";
     var b = document.createElement("b"); b.textContent = title; box.appendChild(b);
     if (detail) { var p = document.createElement("p"); p.textContent = detail; box.appendChild(p); }
-    if (navigator.vibrate) navigator.vibrate(kind === "ok" ? 80 : [60, 60, 60]);
+  }
+
+  /* ---------- Scan confirmation pop-up ---------- */
+  var pop = $("#scan-pop"), popTimer = null, popOpen = false, audioCtx = null;
+  function beep(kind) {
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      var tones = kind === "ok" ? [[880, 0, .12], [1320, .13, .16]] : kind === "warn" ? [[520, 0, .18], [520, .24, .18]] : [[220, 0, .22], [180, .26, .3]];
+      tones.forEach(function (t) {
+        var o = audioCtx.createOscillator(), g = audioCtx.createGain(), at = audioCtx.currentTime + t[1];
+        o.type = kind === "ok" ? "sine" : "square"; o.frequency.value = t[0];
+        g.gain.setValueAtTime(.0001, at); g.gain.exponentialRampToValueAtTime(.25, at + .01); g.gain.exponentialRampToValueAtTime(.0001, at + t[2]);
+        o.connect(g); g.connect(audioCtx.destination); o.start(at); o.stop(at + t[2] + .02);
+      });
+    } catch (e) { /* sound is optional */ }
+  }
+  function showPop(o) {
+    pop.className = "scan-pop " + o.kind;
+    $("#scan-pop-kicker").textContent = o.kicker || "";
+    $("#scan-pop-title").textContent = o.title || "";
+    var dl = $("#scan-pop-facts"); dl.textContent = "";
+    (o.facts || []).forEach(function (f) {
+      if (!f[1]) return;
+      var dt = document.createElement("dt"); dt.textContent = f[0];
+      var dd = document.createElement("dd"); dd.textContent = f[1];
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+    dl.hidden = !dl.children.length;
+    $("#scan-pop-note").textContent = o.note || "";
+    $("#scan-result").hidden = true;
+    pop.hidden = false; popOpen = true;
+    if (scanner) { try { scanner.pause(true); } catch (e) {} }
+    beep(o.kind);
+    if (navigator.vibrate) navigator.vibrate(o.kind === "ok" ? 120 : [80, 60, 80, 60, 80]);
+    var timer = $("#scan-pop-timer"); timer.classList.remove("run"); clearTimeout(popTimer);
+    if (o.kind === "ok") {            // green closes itself; amber/red wait for staff
+      void timer.offsetWidth; timer.style.setProperty("--pop-ms", "6000ms"); timer.classList.add("run"); timer.hidden = false;
+      popTimer = setTimeout(hidePop, 6000);
+    } else timer.hidden = true;
+    $("#scan-pop-next").focus();
+  }
+  function hidePop() {
+    clearTimeout(popTimer);
+    if (!popOpen) return;
+    popOpen = false; pop.hidden = true; lastCode = null;
+    if (scanner) { try { scanner.resume(); } catch (e) {} }
+    var m = $("#manual-code"); if (m && !scanner) m.focus();
+  }
+  $("#scan-pop-next").addEventListener("click", hidePop);
+
+  function guestFacts(g, code) {
+    return [
+      ["Ticket", code],
+      ["Nights", g.full_name ? nightsText(g) : ""],
+      ["Bringing", g.party_size ? partyLabel(g.party_size) : ""],
+      ["Coming as", g.costume || ""],
+      ["Guest type", g.guest_type && g.guest_type !== "guest" ? (TYPES[g.guest_type] || g.guest_type) : ""]
+    ];
   }
 
   function checkIn(code) {
     code = (code || "").trim().toUpperCase();
-    if (!code || busy) return;
+    if (!code || busy || popOpen) return;
     var now = Date.now();
     if (code === lastCode && now - lastAt < 3000) return;
     lastCode = code; lastAt = now; busy = true;
     rpc("admin_check_in", { p_passcode: pass || getPass(), p_event_slug: SLUG, p_ticket_code: code }).then(function (r) {
-      if (!r.ok) { showResult("bad", "Session expired", "Close this and log in again."); return; }
+      if (!r.ok) { showPop({ kind: "bad", kicker: "Not signed in", title: "Session expired", note: "Close this and log in again." }); return; }
       var g = r.rsvp || {};
-      var party = g.party_size ? " · bringing " + partyLabel(g.party_size) : "";
-      if (r.result === "checked_in") showResult("ok", (g.guest_type && g.guest_type !== "guest" ? "★ " + (TYPES[g.guest_type] || "") + ": " : "") + g.full_name, "✓ Valid ticket. Check their ID shows this name. " + code + party + (g.costume ? " · as " + g.costume : ""));
-      else if (r.result === "wrong_night") showResult("bad", "Wrong night: " + g.full_name, "This ticket is for " + nightsText(g) + ", not tonight (" + nightShort(r.night) + "). Check with the event lead.");
-      else if (r.result === "test_ok") showResult("ok", "Test scan OK: " + g.full_name, "Valid ticket for " + nightsText(g) + ". Not an event night, so nothing was recorded.");
-      else if (r.result === "already") showResult("warn", "Already used tonight", "This ticket (" + g.full_name + ") was scanned at " + fmtDate(g.checked_in_at) + ". If this isn't " + g.full_name + ", it's a copied QR.");
-      else if (r.result === "cancelled") showResult("bad", "RSVP cancelled", g.full_name + "'s RSVP was cancelled. Check with the event lead.");
-      else showResult("bad", "Ticket not found", code + " isn't on this event's list. Check the code or look them up by name.");
+      var star = g.guest_type && g.guest_type !== "guest" ? "\u2605 " + (TYPES[g.guest_type] || "") + " \u00b7 " : "";
+      if (r.result === "checked_in")
+        showPop({ kind: "ok", kicker: star + "\u2713 Registered \u00b7 Checked in", title: g.full_name, facts: guestFacts(g, code),
+          note: "Valid ticket. Check their ID shows this name, then let them in." });
+      else if (r.result === "test_ok")
+        showPop({ kind: "ok", kicker: star + "\u2713 Registered", title: g.full_name, facts: guestFacts(g, code),
+          note: "Test scan: today isn't an event night, so no check-in was recorded." });
+      else if (r.result === "already")
+        showPop({ kind: "warn", kicker: "Already checked in", title: g.full_name, facts: guestFacts(g, code).concat([["Scanned at", fmtDate(g.checked_in_at)]]),
+          note: "This ticket was already used tonight. If this person isn't " + g.full_name + ", it's a copied QR. Check their ID." });
+      else if (r.result === "wrong_night")
+        showPop({ kind: "bad", kicker: "Registered \u00b7 Wrong night", title: g.full_name, facts: guestFacts(g, code),
+          note: "This ticket is for " + nightsText(g) + ", not tonight (" + nightShort(r.night) + "). Check with the event lead." });
+      else if (r.result === "cancelled")
+        showPop({ kind: "bad", kicker: "RSVP cancelled", title: g.full_name, facts: [["Ticket", code]],
+          note: "This RSVP was cancelled. Check with the event lead." });
+      else
+        showPop({ kind: "bad", kicker: "Not registered", title: "Ticket not found", facts: [["Code", code]],
+          note: "This code isn't on the Tabi Tabi Po guest list. Check the code, or search their name in the guest list." });
       if (g.id && r.result === "checked_in") { load(true); }
-    }).catch(function (ex) { showResult("bad", "Couldn't check in", ex.message); })
+    }).catch(function (ex) { showPop({ kind: "bad", kicker: "Couldn't check in", title: "Connection problem", note: ex.message + " Try again, or type the code." }); })
       .then(function () { busy = false; });
   }
 
+  /* ---------- Camera ---------- */
+  function camError(err) {
+    var m = String((err && (err.name || err.message)) || err || "");
+    if (!window.isSecureContext) return "The camera needs a secure (https) page. Open the admin from https://soleiyait8.github.io.";
+    if (/NotAllowed|Permission|denied/i.test(m)) return "Camera access is blocked. Click the camera or lock icon in the address bar, set Camera to Allow, then tap \u201cTry the camera again\u201d.";
+    if (/NotFound|DevicesNotFound|Requested device not found|no camera/i.test(m)) return "No camera found on this device. Use a phone or tablet at the door, or type the ticket code below.";
+    if (/NotReadable|TrackStart|Could not start|in use/i.test(m)) return "The camera is being used by another app (Zoom, Teams, Camera\u2026). Close it, then tap \u201cTry the camera again\u201d.";
+    return "Camera couldn't start (" + (m || "unknown error") + "). Tap \u201cTry the camera again\u201d, or type the ticket code below.";
+  }
   function startScanner() {
     var Lib = window.Html5Qrcode || (window.__Html5QrcodeLibrary__ && window.__Html5QrcodeLibrary__.Html5Qrcode);
-    if (!Lib) { $("#cam-msg").textContent = "Camera scanner didn't load. Type the code below."; return; }
+    var retry = $("#cam-retry"); retry.hidden = true;
+    if (!Lib) { $("#cam-msg").textContent = "Camera scanner didn't load (check the internet connection). Type the code below."; retry.hidden = false; return; }
+    if (scanner) return;
+    $("#cam-msg").textContent = "Starting camera\u2026";
+    var cfg = { fps: 10, qrbox: function (w, h) { var s = Math.floor(Math.min(w, h) * 0.7); return { width: s, height: s }; } };
+    var onScan = function (text) { checkIn(text); };
     scanner = new Lib("reader");
-    scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: function (w, h) { var s = Math.floor(Math.min(w, h) * 0.7); return { width: s, height: s }; } },
-      function (text) { checkIn(text); }, function () {})
-      .then(function () { $("#cam-msg").textContent = "Point the camera at the guest's QR code."; })
-      .catch(function () { $("#cam-msg").textContent = "Camera unavailable. Allow camera access (site must be on https), or type the code below."; });
+    function ready() { $("#cam-msg").textContent = "Point the camera at the guest's QR code."; }
+    // Rear camera on phones; laptops/desktops only have a front webcam, so fall back to any camera.
+    scanner.start({ facingMode: "environment" }, cfg, onScan, function () {}).then(ready).catch(function (err1) {
+      if (/NotAllowed|Permission|denied/i.test(String((err1 && (err1.name || err1.message)) || err1))) throw err1;
+      return Lib.getCameras().then(function (cams) {
+        if (!cams || !cams.length) throw { name: "NotFoundError" };
+        return scanner.start(cams[cams.length - 1].id, cfg, onScan, function () {}).then(ready);
+      });
+    }).catch(function (err) {
+      try { scanner.clear(); } catch (e) {}
+      scanner = null;
+      $("#cam-msg").textContent = camError(err);
+      retry.hidden = false;
+    });
   }
+  $("#cam-retry").addEventListener("click", function () { startScanner(); });
   function stopScanner() {
     if (scanner) { var s = scanner; scanner = null; s.stop().catch(function () {}).then(function () { try { s.clear(); } catch (e) {} }); }
   }
 
   $("#open-scan").addEventListener("click", function () {
-    $("#scan-result").hidden = true; scanModal.showModal(); startScanner();
+    $("#scan-result").hidden = true; pop.hidden = true; popOpen = false; scanModal.showModal(); startScanner();
   });
   $("#close-scan").addEventListener("click", function () { scanModal.close(); });
-  scanModal.addEventListener("close", stopScanner);
+  scanModal.addEventListener("close", function () { hidePop(); stopScanner(); });
+  scanModal.addEventListener("cancel", function (e) { if (popOpen) { e.preventDefault(); hidePop(); } });
   $("#manual-form").addEventListener("submit", function (e) {
     e.preventDefault(); lastCode = null; checkIn($("#manual-code").value); $("#manual-code").value = "";
   });
