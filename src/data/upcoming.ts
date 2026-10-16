@@ -44,3 +44,12 @@ export const upcomingEvents: UpcomingEvent[] = [
     secondary: { label: "Stay for the party", url: site.bookingUrl },
   },
 ];
+
+/** Orange bar at the top of every page (copied from zhostel.github.io/events/). Links hide after their event ends. */
+export const announcement = {
+  label: "Halloween at Z:",
+  links: [
+    { eventId: "tabi-tabi-po", text: "Tabi Tabi Po at Salakot, Oct 30–31", url: "events/tabi-tabi-po/" },
+    { eventId: "ody-z", text: "THE ODY-Z street party moves to Nov 20", url: "https://ody-z.com/" },
+  ],
+};

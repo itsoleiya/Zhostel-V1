@@ -1,0 +1,18 @@
+/* Colours sampled from the reference bar: #ff5b2e background, #1a0802 text, 48px tall. */
+.announce {
+  position: relative; z-index: 0;   /* below the fixed menu / book buttons on phones */
+  background: #ff5b2e; color: #1a0802;
+  font: 700 16px/1.4 "DM Sans", Arial, sans-serif;
+  text-align: center; padding: 12px 20px; min-height: 48px;
+  display: flex; align-items: center; justify-content: center;
+}
+.announce p { margin: 0; }
+.announce a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1.5px; }
+.announce a:hover { text-decoration-thickness: 2.5px; }
+.announce a:focus-visible { outline: 3px solid #1a0802; outline-offset: 2px; }
+/* Header sits right under the bar instead of at the very top of the page */
+.header-anchor { position: relative; z-index: 30; height: 0; }
+/* Phones: the fixed 50px menu + book buttons sit at the top-left, so keep the text clear of them */
+@media (max-width: 769px) {
+  .announce { font-size: 14px; padding: 8px 12px 8px 122px; text-align: left; justify-content: flex-start; min-height: 50px; }
+}

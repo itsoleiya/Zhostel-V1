@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../components/Header";
+import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import { BackToTop, BookFloat } from "../components/Chrome";
 
@@ -20,7 +21,10 @@ export default function SiteLayout() {
   return (
     <>
       <a className="skip-link" href="#content">Skip to content</a>
-      <Header />
+      <Announcement />
+      <div className="header-anchor">
+        <Header />
+      </div>
       <Outlet />
       <BookFloat />
       <BackToTop />
