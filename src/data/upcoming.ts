@@ -16,9 +16,9 @@ export const upcomingEvents: UpcomingEvent[] = [
     id: "tabi-tabi-po",
     tag: "Salakot opening night · Halloween",
     title: "Tabi Tabi Po",
-    dateText: "Fri & Sat, Oct 30–31, 2026 · 9PM",
+    dateText: "Fri & Sat, Oct 30–31, 2026 · 6PM",
     venue: "Salakot at Z Hostel, 5660 Don Pedro St.",
-    startsAt: "2026-10-30T21:00:00+08:00",
+    startsAt: "2026-10-30T18:00:00+08:00",
     endsAt: "2026-11-01T04:00:00+08:00",
     description:
       "A night with the spirits of Philippine folklore. DJ sets all night, drinks at the bar, and best in costume for whoever brings the best myth from home.",
