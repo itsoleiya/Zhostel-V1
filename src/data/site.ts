@@ -6,7 +6,7 @@ export const site = {
     { label: "(632) 8856 0851", tel: "+63288560851", kind: "T" },
     { label: "(63) 917 889 8531", tel: "+639178898531", kind: "M" },
   ],
-  email: "zhostelreservations@gmail.com",
+  email: "reservations@zhostel.com",
   groupEmail: "sales@zhostelph.com",
   address: "5660 Don Pedro St. Brgy. Poblacion, Makati City, Philippines 1210",
   addressShort: "5660 Don Pedro St. Brgy. Poblacion, Makati City, Philippines, 1210",
