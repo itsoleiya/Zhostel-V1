@@ -19,7 +19,7 @@ export default function Announcement() {
   return (
     <aside className="announce" aria-label="Upcoming events">
       <p>
-        <span className="announce__label">{announcement.label}</span>{" "}
+        {announcement.label && <><span className="announce__label">{announcement.label}</span>{" "}</>}
         {links.map((l, i) => {
           const ext = /^https?:\/\//.test(l.url);
           const href = ext ? l.url : import.meta.env.BASE_URL + l.url;
