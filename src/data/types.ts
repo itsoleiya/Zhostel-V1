@@ -21,6 +21,8 @@ export interface Hero {
   subtitle: string | null;
   /** Small rotated credit at the right edge, e.g. "@ ZHostel 2018". */
   copyright: string | null;
+  /** true = no cover video; plain dark background when there is no photo either (Careers). */
+  noVideo?: boolean;
 }
 
 export interface PageMeta {

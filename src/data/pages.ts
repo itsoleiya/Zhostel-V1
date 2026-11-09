@@ -19,8 +19,8 @@ export const heroes: Record<string, Hero> = {
   rooms: { image: `${U}/2018/08/ras_cover-1400x933.jpg`, logo: `${U}/2019/03/White-W-BG-Logo-1-300x300.png`, title: "Take a Tour", subtitle: "(rooms & services)", copyright: "@ ZHostel 2018" },
   events: { image: `${U}/2018/08/a6-1400x933.jpg`, logo: `${U}/2019/03/Yellow-_-Black-Logo-300x300.png`, title: "DO MORE. BE MORE.", subtitle: "(events & activities)", copyright: "@ ZHostel 2020" },
   gallery: { image: `${U}/2018/09/gallery-1400x749.jpg`, logo: `${U}/2019/03/Black-_-Yellow-Logo-300x300.png`, title: "Gallery", subtitle: null, copyright: null },
-  // Careers (new page): cover video behind the black & yellow logo, like Gallery.
-  careers: { image: null, logo: `${U}/2019/03/Black-_-Yellow-Logo-300x300.png`, title: "Careers", subtitle: "(join the Z team)", copyright: null },
+  // Careers (new page): black & yellow logo on a plain dark background, no cover video.
+  careers: { image: null, logo: `${U}/2019/03/Black-_-Yellow-Logo-300x300.png`, title: "Careers", subtitle: "(join the Z team)", copyright: null, noVideo: true },
   // The original Contact, Blog and post pages set no hero photo or title, so only the cover video shows.
   plain: { image: null, logo: null, title: null, subtitle: null, copyright: null },
 };
