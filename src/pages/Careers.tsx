@@ -90,12 +90,12 @@ export default function Careers() {
 
   return (
     <>
-      <Hero data={heroes.plain} />
+      <Hero data={heroes.careers} />
       <main id="content" className="careers">
         <section className="section section--white careers-intro">
           <div className="container text-center">
             <p className="careers-kicker">{careersIntro.kicker}</p>
-            <h1 className="careers-title">{careersIntro.title}</h1>
+            <h2 className="careers-title">{careersIntro.title}</h2>
             <p className="careers-lede">{careersIntro.lede}</p>
           </div>
         </section>
