@@ -13,11 +13,16 @@ import RouteError from "../pages/RouteError";
 // The blog carries all 92 posts (~600 KB), so it loads only when visited.
 const Blog = lazyWithReload(() => import("../pages/Blog"));
 const Post = lazyWithReload(() => import("../pages/Post"));
+// Careers pages carry the Supabase client, so they load only when visited.
+const Careers = lazyWithReload(() => import("../pages/Careers"));
+const CareersAdmin = lazyWithReload(() => import("../pages/CareersAdmin"));
 const wrap = (el: React.ReactNode) => <Suspense fallback={<div className="route-loading" role="status">Loading…</div>}>{el}</Suspense>;
 import NotFound from "../pages/NotFound";
 
 /** URLs match the WordPress site, so existing links and search results keep working. */
 export const router = createBrowserRouter([
+  // HR dashboard: no public header/footer, not linked anywhere, noindex.
+  { path: "/careers/admin", element: wrap(<CareersAdmin />), errorElement: <RouteError /> },
   {
     element: <SiteLayout />,
     errorElement: <RouteError />,
@@ -32,6 +37,7 @@ export const router = createBrowserRouter([
       { path: "/events-and-activities", element: <Events /> },
       { path: "/gallery", element: <Gallery /> },
       { path: "/contact-us", element: <Contact /> },
+      { path: "/careers", element: wrap(<Careers />) },
       { path: "/blog", element: wrap(<Blog />) },
       { path: "/blog/page/:page", element: wrap(<Blog />) },
       { path: "/:slug", element: wrap(<Post />) },
