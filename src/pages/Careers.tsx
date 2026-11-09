@@ -111,8 +111,8 @@ export default function Careers() {
                     <div className="job-card__head">
                       <div>
                         <h3>{j.title}</h3>
-                        <p className="job-card__meta">{j.type} · {j.location}</p>
-                        <p className="job-card__summary">{j.summary}</p>
+                        <p className="job-card__meta">{[j.type, j.location].filter(Boolean).join(" · ")}</p>
+                        {j.summary && <p className="job-card__summary">{j.summary}</p>}
                       </div>
                       <div className="job-card__actions">
                         <button type="button" className="job-btn job-btn--ghost" aria-expanded={isOpen} aria-controls={`job-${j.id}`}
@@ -122,12 +122,23 @@ export default function Careers() {
                     </div>
                     <div className="job-card__body" id={`job-${j.id}`} hidden={!isOpen}>
                       <div>
-                        <h4>What you'll do</h4>
-                        <ul>{j.responsibilities.map((r) => <li key={r}>{r}</li>)}</ul>
+                        <h4>Key responsibilities</h4>
+                        {j.responsibilities.map((sec, i) => (
+                          <div key={sec.heading ?? i} className="job-section">
+                            {sec.heading && <h5>{sec.heading}</h5>}
+                            <ul>{sec.items.map((r) => <li key={r}>{r}</li>)}</ul>
+                          </div>
+                        ))}
                       </div>
                       <div>
-                        <h4>What we're looking for</h4>
+                        <h4>Qualifications</h4>
                         <ul>{j.qualifications.map((q) => <li key={q}>{q}</li>)}</ul>
+                        {j.competencies && j.competencies.length > 0 && (
+                          <>
+                            <h4 className="job-h4-gap">Key competencies</h4>
+                            <ul>{j.competencies.map((c) => <li key={c}>{c}</li>)}</ul>
+                          </>
+                        )}
                       </div>
                     </div>
                   </li>
