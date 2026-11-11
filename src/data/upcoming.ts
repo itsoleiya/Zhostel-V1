@@ -27,22 +27,6 @@ export const upcomingEvents: UpcomingEvent[] = [
     primary: { label: "RSVP for your QR ticket", url: "events/tabi-tabi-po/" }, // page inside this site (public/events/tabi-tabi-po)
     secondary: { label: "Stay for the party", url: site.bookingUrl },
   },
-  {
-    id: "ody-z",
-    tag: "Z Street 2026 · New date",
-    title: "THE ODY-Z",
-    dateText: "Fri, Nov 27, 2026 (new date)",
-    venue: "Don Pedro & Alfonso Streets, Poblacion",
-    // Start time isn't published; 6PM matches the countdown on zhostel.github.io/events/. Edit if it changes.
-    startsAt: "2026-11-27T18:00:00+08:00",
-    endsAt: "2026-11-28T04:00:00+08:00",
-    description:
-      "It comes home on November 27. A Poblacion homecoming street party across the whole block: Z Hostel, the Vine Building and the street in between. Costumes encouraged. 18+.",
-    image: "https://ody-z.com/assets/hero-wide.jpg", // from the ODY-Z site (company-owned); replace with a local copy in public/events/ when available
-    imageAlt: "THE ODY-Z street party poster art",
-    primary: { label: "See more at ody-z.com", url: "https://ody-z.com/" },
-    secondary: { label: "Stay for the party", url: site.bookingUrl },
-  },
 ];
 
 /** Orange bar at the top of every page (copied from zhostel.github.io/events/). Links hide after their event ends. */
@@ -50,6 +34,5 @@ export const announcement = {
   label: "", // no prefix; Halloween is over
   links: [
     { eventId: "tabi-tabi-po", text: "Tabi Tabi Po at Salakot, Oct 30–31", url: "events/tabi-tabi-po/" },
-    { eventId: "ody-z", text: "THE ODY-Z street party moves to Nov 27", url: "https://ody-z.com/" },
   ],
 };
