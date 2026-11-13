@@ -1,7 +1,7 @@
 import { useRef, useState, type FormEvent } from "react";
 import Hero from "../components/Hero";
 import { heroes } from "../data/pages";
-import { careersIntro, cvRules, jobs, privacyNotice } from "../data/careers";
+import { careersIntro, cvRules, openJobs, privacyNotice } from "../data/careers";
 import { supabase } from "../lib/supabase";
 import { usePageMeta } from "../utils/meta";
 import "./pages.css";
@@ -20,6 +20,7 @@ function safeFileName(name: string) {
 }
 
 export default function Careers() {
+  const jobs = openJobs();
   usePageMeta({
     title: "Careers | Z Hostel",
     path: "/careers/",

@@ -13,6 +13,8 @@ export type Job = {
   responsibilities: JobSection[];
   qualifications: string[];
   competencies?: string[];
+  /** false = hidden from the Careers page (position filled). Keep the entry so it can be re-opened later. */
+  open?: boolean;
 };
 
 export const careersIntro = {
@@ -131,6 +133,7 @@ export const jobs: Job[] = [
   {
     id: "sales-reservation-manager",
     title: "Sales & Reservation Manager",
+    open: false, // filled (new hire, Nov 2026). Set to true to show it again.
     location: "Poblacion, Makati",
     // Summary written from HR's job description (HR to confirm).
     summary: "Leads the sales and reservation operations to grow room bookings, events, and overall revenue. Develops sales strategies, manages booking channels and room inventory, and builds strong relationships with corporate clients, travel agencies, and key partners.",
@@ -186,6 +189,9 @@ export const jobs: Job[] = [
     ],
   },
 ];
+
+/** Positions currently shown on the Careers page. */
+export const openJobs = (): Job[] => jobs.filter((j) => j.open !== false);
 
 /** Shown above the consent checkbox. HR or legal should approve this wording before launch. */
 export const privacyNotice = [
