@@ -10,7 +10,7 @@ const perPage = 10;
 
 const urls = [
   ["/", null], ["/about-z/", null], ["/rooms-and-services/", null], ["/events-and-activities/", null],
-  ["/gallery/", null], ["/contact-us/", null], ["/careers/", null], ["/christmas-table/", null], ["/blog/", posts[0]?.modified],
+  ["/gallery/", null], ["/contact-us/", null], ["/careers/", null], ["/blog/", posts[0]?.modified],
   ...Array.from({ length: Math.ceil(posts.length / perPage) - 1 }, (_, i) => [`/blog/page/${i + 2}/`, null]),
   ...posts.map((p) => [`/${p.slug}/`, p.modified]),
 ];
