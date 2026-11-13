@@ -28,6 +28,8 @@ export const jobs: Job[] = [
     id: "hostel-manager",
     title: "Hostel Manager",
     location: "Poblacion, Makati",
+    // Summary written from HR's job description (HR to confirm).
+    summary: "Manages the day-to-day operations of the hostel, ensuring a clean, safe, and welcoming environment for guests from around the world. Leads the front desk, housekeeping, admin, and maintenance teams while driving guest satisfaction, online bookings, and community events.",
     responsibilities: [
       { heading: "Operations & Guest Services", items: [
         "Supervise the front desk, housekeeping, admin and maintenance operations.",
@@ -130,6 +132,8 @@ export const jobs: Job[] = [
     id: "sales-reservation-manager",
     title: "Sales & Reservation Manager",
     location: "Poblacion, Makati",
+    // Summary written from HR's job description (HR to confirm).
+    summary: "Leads the sales and reservation operations to grow room bookings, events, and overall revenue. Develops sales strategies, manages booking channels and room inventory, and builds strong relationships with corporate clients, travel agencies, and key partners.",
     responsibilities: [
       { heading: "Sales and Business Development", items: [
         "Develop sales strategies to increase room bookings, events, and overall resort revenue.",
