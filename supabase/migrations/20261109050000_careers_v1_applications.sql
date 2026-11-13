@@ -1,0 +1,4 @@
+-- Applied to project pdiypxgvfzaiweiuhstf on 2026-11-09 via Supabase MCP (see migration history in the dashboard).
+-- Careers: job_applications table, careers_admins allowlist, private careers-cvs bucket (5 MB, PDF/Word),
+-- careers_apply() RPC with honeypot, consent, CV-exists check and rate limits (3/email/day, 5/IP/hour).
+-- Follow-up 20261109050100: revoke is_careers_admin() from anon.

@@ -10,7 +10,7 @@ const perPage = 10;
 
 const urls = [
   ["/", null], ["/about-z/", null], ["/rooms-and-services/", null], ["/events-and-activities/", null],
-  ["/gallery/", null], ["/contact-us/", null], ["/blog/", posts[0]?.modified],
+  ["/gallery/", null], ["/contact-us/", null], ["/careers/", null], ["/blog/", posts[0]?.modified],
   ...Array.from({ length: Math.ceil(posts.length / perPage) - 1 }, (_, i) => [`/blog/page/${i + 2}/`, null]),
   ...posts.map((p) => [`/${p.slug}/`, p.modified]),
 ];
@@ -33,7 +33,8 @@ const esc = (t) => String(t ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").
 const pageTitles = {
   "/": ["Z Hostel", null], "/about-z/": ["About Z | Z Hostel", null],
   "/rooms-and-services/": ["Rooms and Services | Z Hostel", null], "/events-and-activities/": ["Events and Activities | Z Hostel", null],
-  "/gallery/": ["Gallery | Z Hostel", null], "/contact-us/": ["Contact Us | Z Hostel", null], "/blog/": ["Blog | Z Hostel", null],
+  "/gallery/": ["Gallery | Z Hostel", null], "/contact-us/": ["Contact Us | Z Hostel", null],
+  "/careers/": ["Careers | Z Hostel", "Join the Z Hostel team in Poblacion, Makati. See our open positions and apply online."], "/blog/": ["Blog | Z Hostel", null],
 };
 const totalPages = Math.ceil(posts.length / perPage);
 for (let i = 2; i <= totalPages; i++) pageTitles[`/blog/page/${i}/`] = [`Blog | Page ${i} of ${totalPages} | Z Hostel`, null];
@@ -56,5 +57,5 @@ for (const [route, [title, desc, image]] of Object.entries(pageTitles)) {
   writeFileSync(file, html); written++;
 }
 console.log(`route pages: ${written} index.html files (HTTP 200 on GitHub Pages)`);
-writeFileSync("dist/robots.txt", `User-agent: *\nAllow: /\nDisallow: /events/tabi-tabi-po/admin.html\n\nSitemap: ${site}/sitemap.xml\n`);
+writeFileSync("dist/robots.txt", `User-agent: *\nAllow: /\nDisallow: /events/tabi-tabi-po/admin.html\nDisallow: /careers/admin/\n\nSitemap: ${site}/sitemap.xml\n`);
 console.log(`sitemap.xml: ${urls.length} URLs for ${site}`);

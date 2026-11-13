@@ -39,8 +39,8 @@ export default function Hero({ data }: { data: HeroData }) {
   const style = data.image ? { backgroundImage: `url(${assetUrl(data.image)})` } : undefined;
 
   return (
-    <section className={`hero on-dark${bookOpen ? " hero--book-open" : ""}`} style={style} aria-label={data.title ?? "Z Hostel"}>
-      {!reduced && (
+    <section className={`hero on-dark${bookOpen ? " hero--book-open" : ""}${data.noVideo && !data.image ? " hero--dark" : ""}`} style={style} aria-label={data.title ?? "Z Hostel"}>
+      {!reduced && !data.noVideo && (
         <video className="hero__video" autoPlay muted loop playsInline preload="metadata"
           poster={data.image ? assetUrl(data.image) : undefined} aria-hidden="true">
           <source src={assetUrl(site.coverVideo)} type="video/mp4" />

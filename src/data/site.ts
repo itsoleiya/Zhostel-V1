@@ -45,5 +45,6 @@ export const navigation = [
   { label: "Events & Activities", to: "/events-and-activities/", long: true },
   { label: "Blog", to: "/blog/" },
   { label: "Gallery", to: "/gallery/" },
+  { label: "Careers", to: "/careers/" },
   { label: "Contact Us", to: "/#contact-us" },
 ] as const;

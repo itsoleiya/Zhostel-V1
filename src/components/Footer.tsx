@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { site } from "../data/site";
 import { useInView } from "./Chrome";
 import { AmenityIcon } from "./Icons";
@@ -40,6 +41,10 @@ export default function Footer() {
             <ul>
               <li><a href={site.social.facebookFooter} target="_blank" rel="noopener noreferrer">Facebook</a></li>
               <li><a href={site.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
+            </ul>
+            <h4>Work With Us</h4>
+            <ul>
+              <li><Link to="/careers/">Careers</Link></li>
             </ul>
           </div>
         </div>

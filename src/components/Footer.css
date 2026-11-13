@@ -20,6 +20,7 @@
 .site-footer h4::after { content: ""; display: block; width: 70px; height: 1px; background: #fff; opacity: .5; margin: 10px 0 20px; }
 .site-footer p { line-height: 25px; margin: 0; }
 .site-footer ul { list-style: none; margin: 0; padding: 0; line-height: 25px; }
+.site-footer ul + h4 { margin-top: 24px; }
 .site-footer ul a::before { content: "-"; display: inline-block; margin-right: 10px; transition: margin .3s; }
 .site-footer ul a:hover::before { margin-right: 15px; }
 
