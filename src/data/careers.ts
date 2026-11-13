@@ -22,7 +22,7 @@ export const careersIntro = {
   hrEmail: "hr@zhostel.com",
 };
 
-/* Job details below are from HR's file "HM, S&RM, OM Job Description.docx" (Nov 2026). */
+/* Job details below are from HR's files "HM, S&RM, OM Job Description.docx" (Nov 2026); Operations Manager updated from the _1 revision. */
 export const jobs: Job[] = [
   {
     id: "hostel-manager",
@@ -80,33 +80,50 @@ export const jobs: Job[] = [
     id: "operations-manager",
     title: "Operations Manager",
     location: "Poblacion, Makati",
+    summary: "Oversees the overall hostel operations, ensuring operational efficiency, financial performance, service quality, and compliance with company standards. Provides leadership and direction to department managers to achieve business objectives and maintain excellent guest experiences.",
     responsibilities: [
-      { items: [
-        "Provide strategic leadership and day-to-day oversight of all operational functions across diverse property portfolios and development projects (residential and commercial).",
-        "Develop, manage, and optimize operational budgets, leveraging engineering expertise to implement cost-effective and sustainable solutions that maximize ROI.",
-        "Design and enforce high-performance operational policies, procedures, and standards to ensure seamless service delivery and regulatory compliance.",
-        "Lead the end-to-end execution of real estate and engineering projects, ensuring on-time and on-budget completion.",
-        "Ensure strict adherence to health, safety, environmental, and permitting regulations, offering expert support in compliance, taxation, and regulatory matters.",
-        "Supervise leasing, maintenance, and tenant relations functions to enhance occupancy rates and deliver a premium customer experience aligned with our brand values.",
-        "Lead, mentor, and empower cross-functional teams, cultivating a culture of accountability, innovation, and inclusivity.",
-        "Oversee vendor coordination, remote facilities management, and building operations, combining technical know-how with operational strategy.",
-        "Monitor KPIs and prepare actionable, executive-level performance reports to inform strategic decision-making.",
-        "Offer remote property and operations management services, providing tailored support in financial modeling, maintenance oversight, and business development initiatives.",
+      { heading: "Operations Management and Oversight", items: [
+        "Oversee the overall daily operations of the hostel, ensuring all departments function efficiently and in accordance with company policies and standards.",
+        "Monitor the performance of the Hostel Manager and other department heads.",
+        "Establish operational procedures, service standards, and performance targets.",
+        "Identify operational issues and implement solutions to improve productivity and service delivery.",
+        "Ensure proper coordination among Front Office, Housekeeping, Food and Beverage, Maintenance, and other operating units.",
+      ] },
+      { heading: "Business Performance and Financial Management", items: [
+        "Monitor operational expenses, departmental budgets, and overall cost efficiency.",
+        "Develop strategies to maximize revenue, occupancy, and profitability.",
+        "Review operational and financial reports and recommend improvements.",
+        "Ensure effective management of resources, supplies, equipment, and inventory.",
+        "Monitor key performance indicators (KPIs) and ensure business targets are met.",
+      ] },
+      { heading: "Guest Experience and Service Quality", items: [
+        "Ensure consistent delivery of quality guest service across all departments.",
+        "Oversee the resolution of escalated guest complaints and operational concerns.",
+        "Monitor guest feedback, online reviews, and satisfaction ratings.",
+        "Implement service improvement initiatives to enhance the overall guest experience.",
+      ] },
+      { heading: "Leadership and People Management", items: [
+        "Provide direction, guidance, and support to the Hostel Manager and department heads.",
+        "Monitor departmental performance and ensure accountability for assigned responsibilities.",
+        "Identify staffing requirements and coordinate with HR on recruitment and manpower planning.",
+        "Support employee development, training, and performance management initiatives.",
+        "Promote teamwork, discipline, and a culture of service excellence.",
+      ] },
+      { heading: "Compliance, Safety and Risk Management", items: [
+        "Ensure compliance with company policies, government regulations, and operational standards.",
+        "Oversee the implementation of safety, security, sanitation, and emergency procedures.",
+        "Ensure facilities, equipment, and operating areas are properly maintained.",
+        "Identify operational risks and implement preventive measures.",
       ] },
     ],
     qualifications: [
-      "Bachelor’s degree in Business Administration, Operations Management, or related field; MBA is a plus.",
-      "At least 7 years of experience in operations or facilities management, with 3+ years in a leadership role.",
-      "Strong understanding of budgeting, sustainability practices, and property operations.",
-      "Excellent leadership, decision-making, and project management skills.",
-    ],
-    competencies: [
-      "Strategic Thinking",
-      "Financial Acumen",
-      "Leadership and Team Development",
-      "Sustainability and Cultural Awareness",
-      "Problem-Solving",
-      "Communication and Stakeholder Engagement",
+      "Bachelor's degree in Hospitality Management, Business Administration, Tourism Management, or a related field.",
+      "At least 5 years of experience in hospitality or hotel operations, preferably in a supervisory or managerial capacity.",
+      "Previous experience overseeing multiple departments or business units.",
+      "Strong leadership, organizational, and decision-making skills.",
+      "Knowledge of hostel/hotel operations, budgeting, cost control, and revenue management.",
+      "Excellent communication, problem-solving, and interpersonal skills.",
+      "Ability to manage operational priorities and drive business performance.",
     ],
   },
   {
