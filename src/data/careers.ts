@@ -87,7 +87,7 @@ export const jobs: Job[] = [
         "Design and enforce high-performance operational policies, procedures, and standards to ensure seamless service delivery and regulatory compliance.",
         "Lead the end-to-end execution of real estate and engineering projects, ensuring on-time and on-budget completion.",
         "Ensure strict adherence to health, safety, environmental, and permitting regulations, offering expert support in compliance, taxation, and regulatory matters.",
-        "Supervise leasing, maintenance, and tenant relations functions to enhance occupancy rates and deliver a premium customer experience aligned with PLUD’s brand values.",
+        "Supervise leasing, maintenance, and tenant relations functions to enhance occupancy rates and deliver a premium customer experience aligned with our brand values.",
         "Lead, mentor, and empower cross-functional teams, cultivating a culture of accountability, innovation, and inclusivity.",
         "Oversee vendor coordination, remote facilities management, and building operations, combining technical know-how with operational strategy.",
         "Monitor KPIs and prepare actionable, executive-level performance reports to inform strategic decision-making.",
