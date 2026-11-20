@@ -116,15 +116,14 @@ export default function EventPackages() {
                     {s.option && <p className="ep-space__opt">{s.option}</p>}
                     {s.rate !== null
                       ? <p className="ep-price">Starts at <b>{peso(s.rate)}</b> <span>fully consumable</span></p>
-                      : <p className="ep-price"><b>Personalized quote</b></p>}
+                      : <p className="ep-price">Price <b>Upon quote</b> <span>build your own</span></p>}
                     <ul className="ep-facts">
                       <li><span>Guest capacity</span>{s.capacityLabel}</li>
-                      <li><span>Duration</span>{s.rate !== null ? "4 hours" : "Based on your plan"}</li>
+                      <li><span>Duration</span>{s.rate !== null ? "4 hours" : "Flexible"}</li>
                       <li><span>Accommodation</span>{s.rooms === null ? "Upon request" : s.rooms === 1 ? "1 room" : `${s.rooms} rooms`}</li>
                       <li><span>Parking</span>{s.parking === null ? "Upon request" : s.parking === 1 ? "1 free slot" : `${s.parking} free slots`}</li>
                       {s.idealFor && <li><span>Ideal for</span>{s.idealFor}</li>}
                     </ul>
-                    {s.quoteNote && <p className="ep-space__note">{s.quoteNote}</p>}
                     <button type="button" className="ep-btn" onClick={() => pickSpace(s.id)}>Inquire for this space</button>
                   </div>
                 </li>
@@ -193,7 +192,7 @@ export default function EventPackages() {
                     <label htmlFor="ep-space">Venue *</label>
                     <select id="ep-space" value={f.space} onChange={(e) => set("space", e.target.value)} {...fp("space")}>
                       <option value="">Choose a space</option>
-                      {spaces.map((s) => <option key={s.id} value={s.id}>{s.name}{s.option ? ` – ${s.option.replace(/^Option \d: /, "")}` : ""} ({s.rate === null ? "personalized quote" : s.capacityLabel})</option>)}
+                      {spaces.map((s) => <option key={s.id} value={s.id}>{s.name}{s.option ? ` – ${s.option.replace(/^Option \d: /, "")}` : ""} ({s.rate === null ? "build your own, personalized quote" : s.capacityLabel})</option>)}
                     </select><Err k="space" />
                   </div>
                   <div>

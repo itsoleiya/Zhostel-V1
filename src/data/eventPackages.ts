@@ -75,8 +75,7 @@ export const spaces: Space[] = [
   { id: "roofdeck-both", name: "Roofdeck", option: "Option 2: Both Roofdecks", capacityLabel: "80 pax", capacity: 80, rate: 120000, rooms: 2, parking: 2, image: `${IMG}/roofdeck-both.webp` },
   { id: "salakot", name: "Salakot Lounge", capacityLabel: "30–60 pax", capacity: 60, rate: 50000, rooms: 1, parking: 1, image: `${IMG}/salakot.webp` },
   { id: "theater", name: "Theater", capacityLabel: "15 pax", capacity: 15, rate: 20000, rooms: 1, parking: 1, idealFor: "Movie / Screening Nights and KTV", image: `${IMG}/theater.webp` },
-  { id: "custom", name: "Custom", option: "Build your own event", capacityLabel: "Flexible", capacity: null, rate: null, rooms: null, parking: null,
-    idealFor: "Bigger groups, multiple spaces, longer hours or special setups",
+  { id: "custom", name: "Custom", capacityLabel: "Flexible", capacity: null, rate: null, rooms: null, parking: null,
     quoteNote: "Tell us your plan and our team will put together a package with a personalized quote.", image: `${IMG}/custom.webp` },
 ];
 
