@@ -17,6 +17,7 @@ const Post = lazyWithReload(() => import("../pages/Post"));
 const Careers = lazyWithReload(() => import("../pages/Careers"));
 const CareersAdmin = lazyWithReload(() => import("../pages/CareersAdmin"));
 const EventPackages = lazyWithReload(() => import("../pages/EventPackages"));
+const EventInquiriesAdmin = lazyWithReload(() => import("../pages/EventInquiries"));
 const wrap = (el: React.ReactNode) => <Suspense fallback={<div className="route-loading" role="status">Loading…</div>}>{el}</Suspense>;
 import NotFound from "../pages/NotFound";
 
@@ -24,6 +25,7 @@ import NotFound from "../pages/NotFound";
 export const router = createBrowserRouter([
   // HR dashboard: no public header/footer, not linked anywhere, noindex.
   { path: "/careers/admin", element: wrap(<CareersAdmin />), errorElement: <RouteError /> },
+  { path: "/event-packages/admin", element: wrap(<EventInquiriesAdmin />), errorElement: <RouteError /> },
   {
     element: <SiteLayout />,
     errorElement: <RouteError />,

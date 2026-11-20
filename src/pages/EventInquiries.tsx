@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { peso } from "../data/eventPackages";
+import type { Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
+import { Login } from "./CareersAdmin";
+import "./CareersAdmin.css";
 
 type Inquiry = {
   id: string; created_at: string; event_type: string; space: string; event_date: string; start_time: string | null;
@@ -20,7 +23,7 @@ const fmtDay = (d: string) => new Date(`${d}T00:00:00+08:00`).toLocaleDateString
 const todayManila = () => new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);
 
 /** "Event inquiries" tab: requests from zhostel.com/event-packages/. Access: table events_admins. */
-export default function Inquiries() {
+export function Inquiries() {
   const sb = supabase();
   const [rows, setRows] = useState<Inquiry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,7 +75,7 @@ export default function Inquiries() {
 
   return (
     <>
-      <div className="ca-tabbar"><h2 className="ca-h2">Event inquiries</h2><button className="ca-btn" onClick={load}>Refresh</button></div>
+      <div className="ca-tabbar"><span /><button className="ca-btn" onClick={load}>Refresh</button></div>
       <div className="ca-stats">
         {[{ value: "all", label: "All" }, ...STATUSES].map((s) => (
           <button key={s.value} className={`ca-stat${status === s.value ? " is-active" : ""}`} onClick={() => setStatus(s.value)}>
@@ -123,5 +126,53 @@ export default function Inquiries() {
         </ul>
       )}
     </>
+  );
+}
+
+/** Event inquiries dashboard at /event-packages/admin/. Access: Supabase login + email in table events_admins. */
+export default function EventInquiriesAdmin() {
+  const sb = supabase();
+  const [session, setSession] = useState<Session | null>(null);
+  const [ready, setReady] = useState(false);
+  const [allowed, setAllowed] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    document.title = "Event inquiries | Z Hostel";
+    const robots = document.createElement("meta");
+    robots.name = "robots"; robots.content = "noindex, nofollow";
+    document.head.appendChild(robots);
+    sb.auth.getSession().then(({ data }) => { setSession(data.session); setReady(true); });
+    const { data: sub } = sb.auth.onAuthStateChange((_e, s) => setSession(s));
+    return () => { sub.subscription.unsubscribe(); robots.remove(); };
+  }, [sb]);
+
+  useEffect(() => {
+    if (!session) { setAllowed(null); return; }
+    sb.rpc("is_events_admin").then(({ data }) => setAllowed(data === true));
+  }, [session, sb]);
+
+  if (!ready) return <div className="ca-shell"><p className="ca-muted">Loading…</p></div>;
+  if (!session) return <Login title="Event inquiries" />;
+  if (allowed === null) return <div className="ca-shell"><p className="ca-muted">Checking access…</p></div>;
+  if (!allowed) {
+    return (
+      <div className="ca-shell ca-narrow">
+        <h1>No access</h1>
+        <p>{session.user.email} doesn't have access to event inquiries. Ask IT to add you.</p>
+        <button className="ca-btn" onClick={() => sb.auth.signOut()}>Sign out</button>
+      </div>
+    );
+  }
+  return (
+    <div className="ca-shell">
+      <header className="ca-top">
+        <div><p className="ca-brand">Z Hostel</p><h1>Event inquiries</h1></div>
+        <div className="ca-top__right">
+          <span className="ca-muted ca-small">{session.user.email}</span>
+          <button className="ca-btn" onClick={() => sb.auth.signOut()}>Sign out</button>
+        </div>
+      </header>
+      <Inquiries />
+    </div>
   );
 }

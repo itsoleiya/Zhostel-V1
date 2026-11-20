@@ -58,5 +58,5 @@ for (const [route, [title, desc, image]] of Object.entries(pageTitles)) {
   writeFileSync(file, html); written++;
 }
 console.log(`route pages: ${written} index.html files (HTTP 200 on GitHub Pages)`);
-writeFileSync("dist/robots.txt", `User-agent: *\nAllow: /\nDisallow: /events/tabi-tabi-po/admin.html\nDisallow: /careers/admin/\n\nSitemap: ${site}/sitemap.xml\n`);
+writeFileSync("dist/robots.txt", `User-agent: *\nAllow: /\nDisallow: /events/tabi-tabi-po/admin.html\nDisallow: /careers/admin/\nDisallow: /event-packages/admin/\n\nSitemap: ${site}/sitemap.xml\n`);
 console.log(`sitemap.xml: ${urls.length} URLs for ${site}`);
