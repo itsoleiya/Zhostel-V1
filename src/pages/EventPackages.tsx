@@ -36,7 +36,7 @@ export default function EventPackages() {
   // Venue rate (+ ₱1,500 per extra guest) is a MINIMUM consumable spend. With a set menu, the bill is
   // whichever is higher: the minimum or the set menu total (can go above the minimum, never below).
   const est = useMemo(() => {
-    if (!space) return null;
+    if (!space || space.rate === null || space.capacity === null) return null;
     const extra = Math.max(0, guests - space.capacity);
     const minimum = space.rate + extra * ADDITIONAL_GUEST_RATE;
     const food = menu?.price && guests ? menu.price * guests : null;
@@ -114,14 +114,17 @@ export default function EventPackages() {
                   <div className="ep-space__body">
                     <h3>{s.name}</h3>
                     {s.option && <p className="ep-space__opt">{s.option}</p>}
-                    <p className="ep-price">Starts at <b>{peso(s.rate)}</b> <span>fully consumable</span></p>
+                    {s.rate !== null
+                      ? <p className="ep-price">Starts at <b>{peso(s.rate)}</b> <span>fully consumable</span></p>
+                      : <p className="ep-price"><b>Personalized quote</b></p>}
                     <ul className="ep-facts">
                       <li><span>Guest capacity</span>{s.capacityLabel}</li>
-                      <li><span>Duration</span>4 hours</li>
-                      <li><span>Accommodation</span>{s.rooms === 1 ? "1 room" : `${s.rooms} rooms`}</li>
-                      <li><span>Parking</span>{s.parking === 1 ? "1 free slot" : `${s.parking} free slots`}</li>
+                      <li><span>Duration</span>{s.rate !== null ? "4 hours" : "Based on your plan"}</li>
+                      <li><span>Accommodation</span>{s.rooms === null ? "Upon request" : s.rooms === 1 ? "1 room" : `${s.rooms} rooms`}</li>
+                      <li><span>Parking</span>{s.parking === null ? "Upon request" : s.parking === 1 ? "1 free slot" : `${s.parking} free slots`}</li>
                       {s.idealFor && <li><span>Ideal for</span>{s.idealFor}</li>}
                     </ul>
+                    {s.quoteNote && <p className="ep-space__note">{s.quoteNote}</p>}
                     <button type="button" className="ep-btn" onClick={() => pickSpace(s.id)}>Inquire for this space</button>
                   </div>
                 </li>
@@ -190,7 +193,7 @@ export default function EventPackages() {
                     <label htmlFor="ep-space">Venue *</label>
                     <select id="ep-space" value={f.space} onChange={(e) => set("space", e.target.value)} {...fp("space")}>
                       <option value="">Choose a space</option>
-                      {spaces.map((s) => <option key={s.id} value={s.id}>{s.name}{s.option ? ` – ${s.option.replace(/^Option \d: /, "")}` : ""} ({s.capacityLabel})</option>)}
+                      {spaces.map((s) => <option key={s.id} value={s.id}>{s.name}{s.option ? ` – ${s.option.replace(/^Option \d: /, "")}` : ""} ({s.rate === null ? "personalized quote" : s.capacityLabel})</option>)}
                     </select><Err k="space" />
                   </div>
                   <div>
@@ -217,10 +220,16 @@ export default function EventPackages() {
                   </div>
                 </div>
 
+                {space && space.rate === null && (
+                  <div className="ep-est" aria-live="polite">
+                    <p className="ep-est__title">Custom event</p>
+                    <p className="ep-est__note">{space.quoteNote} Add your plan in the notes below (spaces, hours, setup, food and drinks).</p>
+                  </div>
+                )}
                 {est && (
                   <div className="ep-est" aria-live="polite">
                     <p className="ep-est__title">Your estimate</p>
-                    <div className="ep-est__row"><span>{space!.name}{space!.option ? ` (${space!.option.replace(/^Option \d: /, "")})` : ""}, up to {space!.capacity} guests</span><b>{peso(space!.rate)}</b></div>
+                    <div className="ep-est__row"><span>{space!.name}{space!.option ? ` (${space!.option.replace(/^Option \d: /, "")})` : ""}, up to {space!.capacity} guests</span><b>{peso(space!.rate ?? 0)}</b></div>
                     {est.extra > 0 && <div className="ep-est__row"><span>{est.extra} additional guest{est.extra > 1 ? "s" : ""} × {peso(ADDITIONAL_GUEST_RATE)}</span><b>{peso(est.extra * ADDITIONAL_GUEST_RATE)}</b></div>}
                     <div className="ep-est__row"><span>Minimum consumable spend</span><b>{peso(est.minimum)}</b></div>
                     {est.food !== null && menu && (

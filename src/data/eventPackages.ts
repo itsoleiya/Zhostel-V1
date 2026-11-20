@@ -57,11 +57,14 @@ export type Space = {
   name: string;
   option?: string;
   capacityLabel: string;
-  /** Guests covered by the base rate (upper capacity). */
-  capacity: number;
-  rate: number;
-  rooms: number;
-  parking: number;
+  /** Guests covered by the base rate (upper capacity). null = custom. */
+  capacity: number | null;
+  /** Minimum spend. null = personalized quote (custom). */
+  rate: number | null;
+  rooms: number | null;
+  parking: number | null;
+  /** Shown instead of the rate/facts for the custom option. */
+  quoteNote?: string;
   idealFor?: string;
   image: string;
 };
@@ -72,6 +75,9 @@ export const spaces: Space[] = [
   { id: "roofdeck-both", name: "Roofdeck", option: "Option 2: Both Roofdecks", capacityLabel: "80 pax", capacity: 80, rate: 120000, rooms: 2, parking: 2, image: `${IMG}/roofdeck-both.webp` },
   { id: "salakot", name: "Salakot Lounge", capacityLabel: "30–60 pax", capacity: 60, rate: 50000, rooms: 1, parking: 1, image: `${IMG}/salakot.webp` },
   { id: "theater", name: "Theater", capacityLabel: "15 pax", capacity: 15, rate: 20000, rooms: 1, parking: 1, idealFor: "Movie / Screening Nights and KTV", image: `${IMG}/theater.webp` },
+  { id: "custom", name: "Custom", option: "Build your own event", capacityLabel: "Flexible", capacity: null, rate: null, rooms: null, parking: null,
+    idealFor: "Bigger groups, multiple spaces, longer hours or special setups",
+    quoteNote: "Tell us your plan and our team will put together a package with a personalized quote.", image: `${IMG}/custom.webp` },
 ];
 
 export type MenuSet = { id: string; name: string; price: number | null; sections: { heading: string; items: string[] }[]; note?: string };

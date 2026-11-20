@@ -74,3 +74,4 @@
 .ep-est__dp { font-size: 14px; color: #000; }
 .ep-est__dp b { font-weight: 800; }
 .ep-dpnote { background: #fff6dc; border-left: 4px solid var(--yellow); padding: 12px 14px; margin: 20px 0 0; font-size: 14px; line-height: 1.5; }
+.ep-space__note { font-size: 14px; line-height: 1.5; margin: 0 0 18px; }
