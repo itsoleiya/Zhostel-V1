@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { applicationStatuses, jobs } from "../data/careers";
+import Inquiries from "./EventInquiries";
 import { supabase } from "../lib/supabase";
 import "./CareersAdmin.css";
 
@@ -17,10 +18,10 @@ export default function CareersAdmin() {
   const sb = supabase();
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
-  const [allowed, setAllowed] = useState<boolean | null>(null);
+  const [access, setAccess] = useState<{ careers: boolean; events: boolean } | null>(null);
 
   useEffect(() => {
-    document.title = "Careers dashboard | Z Hostel";
+    document.title = "Dashboard | Z Hostel";
     const robots = document.createElement("meta");
     robots.name = "robots"; robots.content = "noindex, nofollow";
     document.head.appendChild(robots);
@@ -30,23 +31,55 @@ export default function CareersAdmin() {
   }, [sb]);
 
   useEffect(() => {
-    if (!session) { setAllowed(null); return; }
-    sb.rpc("is_careers_admin").then(({ data }) => setAllowed(data === true));
+    if (!session) { setAccess(null); return; }
+    (async () => {
+      const r = await sb.rpc("my_dashboard_access");
+      if (!r.error && r.data) { setAccess({ careers: !!r.data.careers, events: !!r.data.events }); return; }
+      // Fallback while the events access list isn't installed yet.
+      const c = await sb.rpc("is_careers_admin");
+      setAccess({ careers: c.data === true, events: false });
+    })();
   }, [session, sb]);
 
   if (!ready) return <div className="ca-shell"><p className="ca-muted">Loading…</p></div>;
   if (!session) return <Login />;
-  if (allowed === null) return <div className="ca-shell"><p className="ca-muted">Checking access…</p></div>;
-  if (!allowed) {
+  if (access === null) return <div className="ca-shell"><p className="ca-muted">Checking access…</p></div>;
+  if (!access.careers && !access.events) {
     return (
       <div className="ca-shell ca-narrow">
         <h1>No access</h1>
-        <p>{session.user.email} isn't on the careers dashboard list. Ask IT to add you.</p>
+        <p>{session.user.email} doesn't have access to this dashboard. Ask IT to add you.</p>
         <button className="ca-btn" onClick={() => sb.auth.signOut()}>Sign out</button>
       </div>
     );
   }
-  return <Dashboard email={session.user.email ?? ""} />;
+  return <Shell email={session.user.email ?? ""} access={access} />;
+}
+
+function Shell({ email, access }: { email: string; access: { careers: boolean; events: boolean } }) {
+  const sb = supabase();
+  const [tab, setTab] = useState<"careers" | "events">(access.careers ? "careers" : "events");
+  return (
+    <div className="ca-shell">
+      <header className="ca-top">
+        <div>
+          <p className="ca-brand">Z Hostel</p>
+          <h1>Dashboard</h1>
+        </div>
+        <div className="ca-top__right">
+          <span className="ca-muted ca-small">{email}</span>
+          <button className="ca-btn" onClick={() => sb.auth.signOut()}>Sign out</button>
+        </div>
+      </header>
+      {access.careers && access.events && (
+        <nav className="ca-tabs" aria-label="Dashboard sections">
+          <button className={tab === "careers" ? "is-active" : ""} onClick={() => setTab("careers")}>Job applications</button>
+          <button className={tab === "events" ? "is-active" : ""} onClick={() => setTab("events")}>Event inquiries</button>
+        </nav>
+      )}
+      {tab === "careers" && access.careers ? <Dashboard /> : <Inquiries />}
+    </div>
+  );
 }
 
 function Login() {
@@ -64,7 +97,7 @@ function Login() {
   return (
     <div className="ca-shell ca-narrow">
       <p className="ca-brand">Z Hostel</p>
-      <h1>Careers dashboard</h1>
+      <h1>Dashboard</h1>
       <form onSubmit={onSubmit} className="ca-login">
         <label htmlFor="ca-email">Email</label>
         <input id="ca-email" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -78,7 +111,7 @@ function Login() {
   );
 }
 
-function Dashboard({ email }: { email: string }) {
+function Dashboard() {
   const sb = supabase();
   const [rows, setRows] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
@@ -138,19 +171,8 @@ function Dashboard({ email }: { email: string }) {
   const old = rows.filter((r) => Date.now() - Date.parse(r.created_at) > RETENTION_DAYS * 864e5).length;
 
   return (
-    <div className="ca-shell">
-      <header className="ca-top">
-        <div>
-          <p className="ca-brand">Z Hostel</p>
-          <h1>Careers dashboard</h1>
-        </div>
-        <div className="ca-top__right">
-          <span className="ca-muted ca-small">{email}</span>
-          <button className="ca-btn" onClick={load}>Refresh</button>
-          <button className="ca-btn" onClick={() => sb.auth.signOut()}>Sign out</button>
-        </div>
-      </header>
-
+    <>
+      <div className="ca-tabbar"><h2 className="ca-h2">Job applications</h2><button className="ca-btn" onClick={load}>Refresh</button></div>
       <div className="ca-stats">
         {[{ value: "all", label: "All" }, ...applicationStatuses].map((s) => (
           <button key={s.value} className={`ca-stat${status === s.value ? " is-active" : ""}`} onClick={() => setStatus(s.value)}>
@@ -200,6 +222,6 @@ function Dashboard({ email }: { email: string }) {
           ))}
         </ul>
       )}
-    </div>
+    </>
   );
 }

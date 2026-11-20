@@ -37,3 +37,12 @@
   .ca-filters { grid-template-columns: 1fr; }
   .ca-card { grid-template-columns: 1fr; }
 }
+.ca-tabs { display: flex; gap: 6px; margin: 0 0 22px; border-bottom: 2px solid #eee; }
+.ca-tabs button { font: 700 15px Arial, sans-serif; background: none; border: 0; border-bottom: 3px solid transparent; margin-bottom: -2px; padding: 10px 14px; cursor: pointer; color: #555; }
+.ca-tabs button.is-active { color: #000; border-bottom-color: #ffc425; }
+.ca-tabbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+.ca-h2 { font-size: 20px; margin: 0; }
+.ca-filters--3 { grid-template-columns: 200px 220px 1fr; }
+.ca-event { margin: 0 0 8px; }
+.ca-stats { grid-template-columns: repeat(6, 1fr); }
+@media (max-width: 760px) { .ca-filters--3 { grid-template-columns: 1fr; } }
