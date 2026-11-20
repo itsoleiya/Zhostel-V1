@@ -42,6 +42,10 @@ export default function Footer() {
               <li><a href={site.social.facebookFooter} target="_blank" rel="noopener noreferrer">Facebook</a></li>
               <li><a href={site.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
             </ul>
+            <h4>Plan An Event</h4>
+            <ul>
+              <li><Link to="/event-packages/">Event Packages</Link></li>
+            </ul>
             <h4>Work With Us</h4>
             <ul>
               <li><Link to="/careers/">Careers</Link></li>

@@ -43,6 +43,7 @@ export const navigation = [
   { label: "About Z", to: "/about-z/" },
   { label: "Rooms & Services", to: "/rooms-and-services/", long: true },
   { label: "Events & Activities", to: "/events-and-activities/", long: true },
+  { label: "Event Packages", to: "/event-packages/", long: true },
   { label: "Blog", to: "/blog/" },
   { label: "Gallery", to: "/gallery/" },
   { label: "Careers", to: "/careers/" },
