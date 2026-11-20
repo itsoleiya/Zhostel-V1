@@ -106,7 +106,7 @@ export default function EventPackages() {
         <section className="section section--grey" aria-labelledby="ep-spaces">
           <div className="container">
             <h2 id="ep-spaces" className="ep-h2">Our event spaces</h2>
-            <p className="ep-sub">Each rate is a <b>minimum consumable spend</b>: no venue fee, just enjoy it on anything from the Z Hostel menu or a curated menu set. Your bill can go above the minimum, never below. Every package is 4 hours with exclusive use of the space. Additional guests: {peso(ADDITIONAL_GUEST_RATE)} each (fully consumable).</p>
+            <p className="ep-sub">Each rate is a <b>minimum spend</b>, with no venue fee. Choose either a <b>fully consumable package</b> (order from the Z Hostel menu) or a <b>curated menu package</b>: both have the same minimum spend. Your bill can go above it, never below. Every package is 4 hours with exclusive use of the space. Additional guests: {peso(ADDITIONAL_GUEST_RATE)} each (fully consumable).</p>
             <ul className="ep-spaces">
               {spaces.map((s) => (
                 <li key={s.id} className="ep-space">
@@ -209,10 +209,10 @@ export default function EventPackages() {
                     <input id="ep-guests" type="number" inputMode="numeric" min={1} max={500} value={f.guests} onChange={(e) => set("guests", e.target.value)} {...fp("guests")} /><Err k="guests" />
                   </div>
                   <div>
-                    <label htmlFor="ep-menuset">Menu set</label>
+                    <label htmlFor="ep-menuset">Food &amp; drinks option</label>
                     <select id="ep-menuset" value={f.menu} onChange={(e) => set("menu", e.target.value)}>
-                      <option value="">Undecided / à la carte</option>
-                      {menuSets.map((m) => <option key={m.id} value={m.id}>{m.name}{m.price ? ` – ${peso(m.price)}/person` : " – personalized quote"}</option>)}
+                      <option value="">Fully consumable: order from the Z Hostel menu</option>
+                      {menuSets.map((m) => <option key={m.id} value={m.id}>Curated package: {m.name}{m.price ? ` – ${peso(m.price)}/person` : " – personalized quote"}</option>)}
                     </select>
                   </div>
                 </div>
@@ -224,16 +224,16 @@ export default function EventPackages() {
                     {est.extra > 0 && <div className="ep-est__row"><span>{est.extra} additional guest{est.extra > 1 ? "s" : ""} × {peso(ADDITIONAL_GUEST_RATE)}</span><b>{peso(est.extra * ADDITIONAL_GUEST_RATE)}</b></div>}
                     <div className="ep-est__row"><span>Minimum consumable spend</span><b>{peso(est.minimum)}</b></div>
                     {est.food !== null && menu && (
-                      <div className="ep-est__row"><span>{menu.name} set menu: {guests} × {peso(menu.price!)}</span><b>{peso(est.food)}</b></div>
+                      <div className="ep-est__row"><span>Curated {menu.name} package: {guests} × {peso(menu.price!)}</span><b>{peso(est.food)}</b></div>
                     )}
                     <div className="ep-est__row ep-est__total"><span>Estimated total</span><b>{peso(est.total)}</b></div>
                     <p className="ep-est__note">
                       {est.food === null
-                        ? menu ? `${menu.name} menu: our chef will send a personalized quote. Your bill won't go below the minimum spend.`
-                          : "Spend your minimum on anything from the Z Hostel menu. Your bill can go above it, never below."
+                        ? menu ? `Custom curated package: our chef will send a personalized quote. The same minimum spend applies.`
+                          : "Fully consumable package: spend it on food and drinks from the Z Hostel menu. Your bill can go above the minimum, never below."
                         : est.food >= est.minimum
-                          ? `Your ${menu!.name} set menu is above the minimum spend, so your estimate is the set menu total.`
-                          : `Your ${menu!.name} set menu is below the minimum spend. The remaining ${peso(est.minimum - est.food)} can be spent on drinks or anything else from our menu.`}
+                          ? `The curated ${menu!.name} package replaces the fully consumable package (it is not added on top). Its total is above the minimum spend, so your estimate is the package total.`
+                          : `The curated ${menu!.name} package replaces the fully consumable package (it is not added on top). Its total is below the minimum spend, so the minimum applies: the remaining ${peso(est.minimum - est.food)} can be spent on drinks or anything else from our menu.`}
                     </p>
                     <p className="ep-est__note">Estimate only. Our reservations team will confirm the final quote.</p>
                   </div>
