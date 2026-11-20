@@ -33,12 +33,15 @@ export default function EventPackages() {
   const menu = menuSets.find((m) => m.id === f.menu);
   const guests = Math.max(0, parseInt(f.guests, 10) || 0);
 
+  // Venue rate (+ ₱1,500 per extra guest) is a MINIMUM consumable spend. With a set menu, the bill is
+  // whichever is higher: the minimum or the set menu total (can go above the minimum, never below).
   const est = useMemo(() => {
     if (!space) return null;
     const extra = Math.max(0, guests - space.capacity);
-    const pkg = space.rate + extra * ADDITIONAL_GUEST_RATE;
+    const minimum = space.rate + extra * ADDITIONAL_GUEST_RATE;
     const food = menu?.price && guests ? menu.price * guests : null;
-    return { extra, pkg, food };
+    const total = food ? Math.max(minimum, food) : minimum;
+    return { extra, minimum, food, total };
   }, [space, menu, guests]);
 
   function pickSpace(id: string) {
@@ -71,7 +74,7 @@ export default function EventPackages() {
       p_event_type: eventTypes.find((t) => t.id === f.eventType)?.title ?? f.eventType,
       p_space: spaceLabel, p_event_date: f.date, p_start_time: f.time, p_guests: guests,
       p_menu_set: menu ? menu.name : "", p_full_name: f.name, p_mobile: f.mobile, p_email: f.email,
-      p_company: f.company, p_notes: f.notes, p_estimate: est?.pkg ?? null, p_website: honeypot.current?.value ?? "",
+      p_company: f.company, p_notes: f.notes, p_estimate: est?.total ?? null, p_website: honeypot.current?.value ?? "",
     });
     if (error) { setStatus({ kind: "error", msg: error.message && error.message.length < 160 ? error.message : "Something went wrong. Please try again." }); return; }
     // Notify the reservations team by email (set up after launch); the inquiry is already saved either way.
@@ -103,7 +106,7 @@ export default function EventPackages() {
         <section className="section section--grey" aria-labelledby="ep-spaces">
           <div className="container">
             <h2 id="ep-spaces" className="ep-h2">Our event spaces</h2>
-            <p className="ep-sub">Every package is 4 hours, with exclusive use of the space. Additional guests: {peso(ADDITIONAL_GUEST_RATE)} each (fully consumable).</p>
+            <p className="ep-sub">Each rate is a <b>minimum consumable spend</b>: no venue fee, just enjoy it on anything from the Z Hostel menu or a curated menu set. Your bill can go above the minimum, never below. Every package is 4 hours with exclusive use of the space. Additional guests: {peso(ADDITIONAL_GUEST_RATE)} each (fully consumable).</p>
             <ul className="ep-spaces">
               {spaces.map((s) => (
                 <li key={s.id} className="ep-space">
@@ -143,7 +146,7 @@ export default function EventPackages() {
         <section className="section section--dark ep-menus" aria-labelledby="ep-menu">
           <div className="container">
             <h2 id="ep-menu" className="ep-h2">Curated menu sets</h2>
-            <p className="ep-sub">{menuNote}</p>
+            <p className="ep-sub">{menuNote} A set menu counts toward your venue's minimum spend: if the set menu total is higher, that becomes your bill.</p>
             <ul className="ep-menu-list">
               {menuSets.map((m) => (
                 <li key={m.id} className="ep-menu">
@@ -216,13 +219,23 @@ export default function EventPackages() {
 
                 {est && (
                   <div className="ep-est" aria-live="polite">
-                    <p className="ep-est__title">Your package at a glance</p>
+                    <p className="ep-est__title">Your estimate</p>
                     <div className="ep-est__row"><span>{space!.name}{space!.option ? ` (${space!.option.replace(/^Option \d: /, "")})` : ""}, up to {space!.capacity} guests</span><b>{peso(space!.rate)}</b></div>
                     {est.extra > 0 && <div className="ep-est__row"><span>{est.extra} additional guest{est.extra > 1 ? "s" : ""} × {peso(ADDITIONAL_GUEST_RATE)}</span><b>{peso(est.extra * ADDITIONAL_GUEST_RATE)}</b></div>}
-                    <div className="ep-est__row ep-est__total"><span>Starts at (fully consumable)</span><b>{peso(est.pkg)}</b></div>
-                    {menu && (est.food ? <p className="ep-est__note">{menu.name} menu set for {guests} guests: {peso(est.food)}.</p>
-                      : <p className="ep-est__note">{menu.name}: our chef will send a personalized quote.</p>)}
-                    <p className="ep-est__note">The package amount is consumed on food and drinks. Our team will confirm the final quote with you.</p>
+                    <div className="ep-est__row"><span>Minimum consumable spend</span><b>{peso(est.minimum)}</b></div>
+                    {est.food !== null && menu && (
+                      <div className="ep-est__row"><span>{menu.name} set menu: {guests} × {peso(menu.price!)}</span><b>{peso(est.food)}</b></div>
+                    )}
+                    <div className="ep-est__row ep-est__total"><span>Estimated total</span><b>{peso(est.total)}</b></div>
+                    <p className="ep-est__note">
+                      {est.food === null
+                        ? menu ? `${menu.name} menu: our chef will send a personalized quote. Your bill won't go below the minimum spend.`
+                          : "Spend your minimum on anything from the Z Hostel menu. Your bill can go above it, never below."
+                        : est.food >= est.minimum
+                          ? `Your ${menu!.name} set menu is above the minimum spend, so your estimate is the set menu total.`
+                          : `Your ${menu!.name} set menu is below the minimum spend. The remaining ${peso(est.minimum - est.food)} can be spent on drinks or anything else from our menu.`}
+                    </p>
+                    <p className="ep-est__note">Estimate only. Our reservations team will confirm the final quote.</p>
                   </div>
                 )}
 
