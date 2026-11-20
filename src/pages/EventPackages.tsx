@@ -66,13 +66,16 @@ export default function EventPackages() {
     if (Object.keys(e).length) return;
     setStatus({ kind: "sending" });
     const spaceLabel = space ? `${space.name}${space.option ? ` (${space.option})` : ""}` : f.space;
-    const { error } = await supabase().rpc("event_inquiry_submit", {
+    const sb = supabase();
+    const { data: id, error } = await sb.rpc("event_inquiry_submit", {
       p_event_type: eventTypes.find((t) => t.id === f.eventType)?.title ?? f.eventType,
       p_space: spaceLabel, p_event_date: f.date, p_start_time: f.time, p_guests: guests,
       p_menu_set: menu ? menu.name : "", p_full_name: f.name, p_mobile: f.mobile, p_email: f.email,
       p_company: f.company, p_notes: f.notes, p_estimate: est?.pkg ?? null, p_website: honeypot.current?.value ?? "",
     });
     if (error) { setStatus({ kind: "error", msg: error.message && error.message.length < 160 ? error.message : "Something went wrong. Please try again." }); return; }
+    // Notify the reservations team by email (set up after launch); the inquiry is already saved either way.
+    sb.functions.invoke("inquiry-notify", { body: { id } }).catch(() => {});
     setStatus({ kind: "sent", msg: f.name.trim().split(/\s+/)[0] });
     setF(EMPTY);
   }
