@@ -1,0 +1,3 @@
+-- Applied to project pdiypxgvfzaiweiuhstf on 2026-11-16 via Supabase MCP.
+-- Event Packages page: event_inquiries table (no payments) + event_inquiry_submit() RPC
+-- (honeypot, future date only, 5/email/day, 8/IP/hour). Readable only by careers_admins (dashboard users).

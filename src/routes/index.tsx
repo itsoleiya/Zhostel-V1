@@ -16,6 +16,7 @@ const Post = lazyWithReload(() => import("../pages/Post"));
 // Careers pages carry the Supabase client, so they load only when visited.
 const Careers = lazyWithReload(() => import("../pages/Careers"));
 const CareersAdmin = lazyWithReload(() => import("../pages/CareersAdmin"));
+const EventPackages = lazyWithReload(() => import("../pages/EventPackages"));
 const wrap = (el: React.ReactNode) => <Suspense fallback={<div className="route-loading" role="status">Loading…</div>}>{el}</Suspense>;
 import NotFound from "../pages/NotFound";
 
@@ -38,6 +39,7 @@ export const router = createBrowserRouter([
       { path: "/gallery", element: <Gallery /> },
       { path: "/contact-us", element: <Contact /> },
       { path: "/careers", element: wrap(<Careers />) },
+      { path: "/event-packages", element: wrap(<EventPackages />) },
       { path: "/blog", element: wrap(<Blog />) },
       { path: "/blog/page/:page", element: wrap(<Blog />) },
       { path: "/:slug", element: wrap(<Post />) },

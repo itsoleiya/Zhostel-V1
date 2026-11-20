@@ -21,6 +21,8 @@ export const heroes: Record<string, Hero> = {
   gallery: { image: `${U}/2018/09/gallery-1400x749.jpg`, logo: `${U}/2019/03/Black-_-Yellow-Logo-300x300.png`, title: "Gallery", subtitle: null, copyright: null },
   // Careers (new page): black & yellow logo on a plain dark background, no cover video.
   careers: { image: null, logo: `${U}/2019/03/Black-_-Yellow-Logo-300x300.png`, title: "Careers", subtitle: "(join the Z team)", copyright: null, noVideo: true },
+  // Event Packages (new page): photo from the 2026 event packages deck behind the logo, no video.
+  eventPackages: { image: "/events/packages/hero.webp", logo: `${U}/2019/03/Black-_-Yellow-Logo-300x300.png`, title: "Event Packages", subtitle: "(no venue fee)", copyright: null, noVideo: true },
   // The original Contact, Blog and post pages set no hero photo or title, so only the cover video shows.
   plain: { image: null, logo: null, title: null, subtitle: null, copyright: null },
 };

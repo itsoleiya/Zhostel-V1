@@ -10,7 +10,7 @@ const perPage = 10;
 
 const urls = [
   ["/", null], ["/about-z/", null], ["/rooms-and-services/", null], ["/events-and-activities/", null],
-  ["/gallery/", null], ["/contact-us/", null], ["/careers/", null], ["/blog/", posts[0]?.modified],
+  ["/gallery/", null], ["/contact-us/", null], ["/careers/", null], ["/event-packages/", null], ["/blog/", posts[0]?.modified],
   ...Array.from({ length: Math.ceil(posts.length / perPage) - 1 }, (_, i) => [`/blog/page/${i + 2}/`, null]),
   ...posts.map((p) => [`/${p.slug}/`, p.modified]),
 ];
@@ -34,6 +34,7 @@ const pageTitles = {
   "/": ["Z Hostel", null], "/about-z/": ["About Z | Z Hostel", null],
   "/rooms-and-services/": ["Rooms and Services | Z Hostel", null], "/events-and-activities/": ["Events and Activities | Z Hostel", null],
   "/gallery/": ["Gallery | Z Hostel", null], "/contact-us/": ["Contact Us | Z Hostel", null],
+  "/event-packages/": ["Event Packages | Z Hostel", "Barkada, birthday, corporate and private events at Z Hostel, Poblacion Makati. No venue fee: fully consumable packages."],
   "/careers/": ["Careers | Z Hostel", "Join the Z Hostel team in Poblacion, Makati. See our open positions and apply online."], "/blog/": ["Blog | Z Hostel", null],
 };
 const totalPages = Math.ceil(posts.length / perPage);

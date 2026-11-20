@@ -1,0 +1,73 @@
+.ep .section { padding-top: 80px; padding-bottom: 80px; }
+.ep a { text-decoration: underline; }
+.ep-title { font: 800 48px/1.1 var(--font-display); margin: 0 0 16px; color: #000; }
+.ep-lede { max-width: 680px; margin: 0 auto; font-size: 17px; line-height: 1.6; }
+.ep-badge { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 8px; align-items: baseline; background: var(--yellow); color: #000; padding: 12px 20px; margin: 26px 0 0; }
+.ep-badge b { font: 800 18px/1 var(--font-display); text-transform: uppercase; letter-spacing: .06em; }
+.ep-badge span { font-size: 14px; }
+.ep-types { list-style: none; padding: 0; margin: 46px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; text-align: left; }
+.ep-types li { border-top: 3px solid var(--yellow); background: var(--grey-bg); padding: 18px; }
+.ep-types h3 { font: 800 17px/1.25 var(--font-display); margin: 0 0 8px; color: #000; }
+.ep-types p { margin: 0; font-size: 14px; line-height: 1.55; }
+.ep-h2 { font: 800 34px/1.15 var(--font-display); margin: 0 0 12px; text-align: center; color: inherit; }
+.ep-left { text-align: left; }
+.ep-sub { text-align: center; max-width: 680px; margin: 0 auto 34px; font-size: 15px; line-height: 1.6; }
+.ep-spaces { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.ep-space { background: #fff; display: flex; flex-direction: column; }
+.ep-space img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; display: block; }
+.ep-space__body { padding: 20px 22px 24px; display: flex; flex-direction: column; flex: 1; }
+.ep-space h3 { font: 800 24px/1.1 var(--font-display); margin: 0; color: #000; }
+.ep-space__opt { margin: 4px 0 0; font-weight: 700; font-size: 14px; }
+.ep-price { margin: 12px 0 10px; font-size: 14px; }
+.ep-price b { font: 800 22px/1 var(--font-display); color: #000; }
+.ep-price span { color: var(--muted); font-size: 13px; }
+.ep-facts { list-style: none; padding: 0; margin: 0 0 18px; font-size: 14px; }
+.ep-facts li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid #eee; }
+.ep-facts span { color: var(--muted); }
+.ep-space .ep-btn { margin-top: auto; }
+.ep-btn { font: 700 14px/1 var(--font-button); background: #000; color: #fff; border: 2px solid #000; padding: 13px 20px; cursor: pointer; }
+.ep-btn:hover:not(:disabled) { background: var(--yellow); color: #000; border-color: var(--yellow); }
+.ep-btn:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+.ep-btn--ghost { background: transparent; color: #000; }
+.ep-btn:disabled { opacity: .7; cursor: progress; }
+.ep-incwrap { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
+.ep-check { list-style: none; padding: 0; margin: 10px 0 0; columns: 2; column-gap: 30px; }
+.ep-check li { break-inside: avoid; padding: 7px 0 7px 28px; position: relative; font-size: 15px; line-height: 1.45; }
+.ep-check li::before { content: "✓"; position: absolute; left: 0; top: 6px; width: 20px; height: 20px; background: var(--yellow); color: #000; font-weight: 800; font-size: 13px; text-align: center; line-height: 20px; }
+.ep-excl { background: var(--grey-bg); padding: 22px 24px; }
+.ep-excl h3 { font: 800 18px/1.2 var(--font-display); margin: 0 0 10px; }
+.ep-excl ul { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.75; }
+.ep-menus { background: var(--dark, #292929); color: #fff; }
+.ep-menus .ep-sub { color: #ddd; }
+.ep-menu-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; }
+.ep-menu { background: #111; border: 2px solid var(--yellow); padding: 26px 22px; text-align: center; }
+.ep-menu h3 { display: inline-block; font: 800 24px/1 var(--font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--yellow); border: 2px solid var(--yellow); border-radius: 10px; padding: 8px 16px; margin: 0; }
+.ep-menu__price { color: var(--yellow); font-weight: 800; margin: 12px 0 14px; letter-spacing: .04em; text-transform: uppercase; font-size: 14px; }
+.ep-menu h4 { color: var(--yellow); font: 800 12px/1.2 var(--font-display); letter-spacing: .1em; text-transform: uppercase; margin: 16px 0 6px; }
+.ep-menu ul { list-style: none; padding: 0; margin: 0; font-size: 14px; line-height: 1.6; color: #eee; }
+.ep-menu__note { font-style: italic; font-size: 13px; line-height: 1.5; color: #ccc; margin: 16px 0 0; }
+.ep-formwrap { max-width: 820px; }
+.ep-form label { display: block; font-weight: 700; font-size: 14px; margin: 16px 0 6px; }
+.ep-form input, .ep-form select, .ep-form textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--rule); padding: 11px 12px; font: 15px var(--font-body); background: #fff; border-radius: 0; }
+.ep-form [aria-invalid="true"] { border-color: #c0392b; }
+.ep-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+.ep-field-error { color: #c0392b; font-size: 13px; margin: 6px 0 0; }
+.ep-est { background: var(--grey-bg); border-left: 4px solid var(--yellow); padding: 18px 20px; margin: 24px 0 8px; }
+.ep-est__title { font-weight: 800; margin: 0 0 10px; }
+.ep-est__row { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 14px; }
+.ep-est__total { border-top: 1px solid #ccc; margin-top: 6px; padding-top: 10px; font-size: 16px; }
+.ep-est__total b { font: 800 20px/1 var(--font-display); }
+.ep-est__note { font-size: 13px; color: var(--muted); margin: 8px 0 0; line-height: 1.5; }
+.ep-submit { width: 100%; padding: 16px; font-size: 16px; margin-top: 22px; }
+.ep-bad { background: #fbeaea; border-left: 3px solid #c0392b; padding: 10px 12px; margin-top: 14px; }
+.ep-done { background: var(--grey-bg); border-left: 4px solid var(--yellow); padding: 30px; text-align: center; }
+.ep-done h3 { font: 800 26px/1.2 var(--font-display); margin: 0 0 10px; }
+.ep-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+@media (max-width: 760px) {
+  .ep .section { padding-top: 56px; padding-bottom: 56px; }
+  .ep-title { font-size: 34px; }
+  .ep-h2 { font-size: 28px; }
+  .ep-incwrap { grid-template-columns: 1fr; gap: 26px; }
+  .ep-check { columns: 1; }
+  .ep-grid { grid-template-columns: 1fr; }
+}
