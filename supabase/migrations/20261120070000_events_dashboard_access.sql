@@ -1,0 +1,3 @@
+-- Applied to project pdiypxgvfzaiweiuhstf on 2026-11-20 (via Supabase MCP execute_sql).
+-- events_admins allowlist (it@virginbeachresort.com) + is_events_admin(); event_inquiries readable/updatable/deletable
+-- only by events_admins (no longer careers_admins); staff_notes column added.
