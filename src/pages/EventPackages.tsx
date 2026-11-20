@@ -146,7 +146,7 @@ export default function EventPackages() {
         <section className="section section--dark ep-menus" aria-labelledby="ep-menu">
           <div className="container">
             <h2 id="ep-menu" className="ep-h2">Curated menu sets</h2>
-            <p className="ep-sub">{menuNote} A set menu counts toward your venue's minimum spend: if the set menu total is higher, that becomes your bill.</p>
+            <p className="ep-sub">{menuNote} Curated packages are an alternative to the fully consumable package, not an additional charge. The same venue minimum spend applies.</p>
             <ul className="ep-menu-list">
               {menuSets.map((m) => (
                 <li key={m.id} className="ep-menu">
