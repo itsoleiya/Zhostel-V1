@@ -48,6 +48,10 @@ export const exclusions = [
 
 export const ADDITIONAL_GUEST_RATE = 1500;
 
+/** Downpayment to reserve a slot: share of the estimated total. Non-refundable. */
+export const DOWNPAYMENT_RATE = 0.1;
+export const downpaymentNote = "A non-refundable 10% downpayment is required to reserve your slot. Our reservations team will send the payment details once your date and package are confirmed.";
+
 export type Space = {
   id: string;
   name: string;

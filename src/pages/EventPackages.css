@@ -71,3 +71,6 @@
   .ep-check { columns: 1; }
   .ep-grid { grid-template-columns: 1fr; }
 }
+.ep-est__dp { font-size: 14px; color: #000; }
+.ep-est__dp b { font-weight: 800; }
+.ep-dpnote { background: #fff6dc; border-left: 4px solid var(--yellow); padding: 12px 14px; margin: 20px 0 0; font-size: 14px; line-height: 1.5; }

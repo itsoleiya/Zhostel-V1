@@ -2,7 +2,7 @@ import { useMemo, useRef, useState, type FormEvent } from "react";
 import Hero from "../components/Hero";
 import { heroes } from "../data/pages";
 import {
-  ADDITIONAL_GUEST_RATE, MENU_MIN_PAX, eventTypes, exclusions, inclusions, menuNote, menuSets,
+  ADDITIONAL_GUEST_RATE, DOWNPAYMENT_RATE, MENU_MIN_PAX, downpaymentNote, eventTypes, exclusions, inclusions, menuNote, menuSets,
   packagesIntro, peso, spaces, startTimes,
 } from "../data/eventPackages";
 import { supabase } from "../lib/supabase";
@@ -227,6 +227,7 @@ export default function EventPackages() {
                       <div className="ep-est__row"><span>Curated {menu.name} package: {guests} × {peso(menu.price!)}</span><b>{peso(est.food)}</b></div>
                     )}
                     <div className="ep-est__row ep-est__total"><span>Estimated total</span><b>{peso(est.total)}</b></div>
+                    <div className="ep-est__row ep-est__dp"><span>10% downpayment to reserve (non-refundable)</span><b>{peso(Math.round(est.total * DOWNPAYMENT_RATE))}</b></div>
                     <p className="ep-est__note">
                       {est.food === null
                         ? menu ? `Custom curated package: our chef will send a personalized quote. The same minimum spend applies.`
@@ -247,6 +248,7 @@ export default function EventPackages() {
                 </div>
                 <label htmlFor="ep-notes">Anything else?</label>
                 <textarea id="ep-notes" rows={4} maxLength={3000} placeholder="Program, dietary needs, extras like a DJ or styling…" value={f.notes} onChange={(e) => set("notes", e.target.value)} />
+                <p className="ep-dpnote"><b>Reservation:</b> {downpaymentNote}</p>
                 <div className="ep-hp" aria-hidden="true"><label htmlFor="ep-website">Website</label><input id="ep-website" ref={honeypot} tabIndex={-1} autoComplete="off" /></div>
                 <button type="submit" className="ep-btn ep-submit" disabled={status.kind === "sending"}>{status.kind === "sending" ? "Sending…" : "Send my inquiry"}</button>
                 <div role="status" aria-live="polite">{status.kind === "error" && <p className="ep-bad">Not sent: {status.msg}</p>}</div>
